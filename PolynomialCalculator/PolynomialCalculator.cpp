@@ -12,7 +12,7 @@
 */
 
 #include <iostream>
-#include "UserInterface.h";
+#include "UserInterface.h"
 
 int main()
 {

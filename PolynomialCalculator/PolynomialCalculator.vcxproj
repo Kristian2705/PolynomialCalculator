@@ -127,11 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CalculatorFunctionalities.cpp" />
     <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="PolynomialCalculator.cpp" />
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CalculatorFunctionalities.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="UserInterface.h" />

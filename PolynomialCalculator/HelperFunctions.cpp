@@ -38,3 +38,77 @@ uint32_t getOption() {
 bool isValidOption(uint32_t option) {
 	return option >= OPTIONS_LOWER_BOUND && option <= OPTION_UPPER_BOUND;
 }
+
+void printPolynomial(std::vector<int>& polynomial, int degree) {
+	for (int i = 0; i <= degree; i++) {
+		int currentDegree = degree - i;
+		if (currentDegree == degree) {
+			int currentCoefficient = polynomial.at(i);
+			if (currentCoefficient == 1 || currentCoefficient == -1) {
+				std::cout << "x^" << currentDegree;
+			}
+			else {
+				std::cout << currentCoefficient << "x^" << currentDegree;
+			}
+		}
+		else if (currentDegree > 1) {
+			int currentCoefficient = polynomial.at(i);
+			if (currentCoefficient > 0) {
+				if (currentCoefficient == 1) {
+					std::cout << "+x^" << currentDegree;
+				}
+				else {
+					std::cout << "+" << currentCoefficient << "x^" << currentDegree;
+				}
+			}
+			else {
+				if (currentCoefficient == -1) {
+					std::cout << "-x^" << currentDegree;
+				}
+				else {
+					std::cout << currentCoefficient << "x^" << currentDegree;
+				}
+			}
+		}
+		else if (currentDegree == 1) {
+			int currentCoefficient = polynomial.at(i);
+			if (currentCoefficient > 0) {
+				if (currentCoefficient == 1) {
+					std::cout << "+x";
+				}
+				else {
+					std::cout << "+" << currentCoefficient << "x";
+				}
+			}
+			else {
+				if (currentCoefficient == -1) {
+					std::cout << "-x";
+				}
+				else {
+					std::cout << currentCoefficient << "x";
+				}
+			}
+		}
+		else {
+			int currentCoefficient = polynomial.at(i);
+			if (currentCoefficient > 0) {
+				std::cout << "+" << currentCoefficient << std::endl;
+			}
+			else {
+				std::cout << currentCoefficient << std::endl;
+			}
+		}
+	}
+	std::cout << std::endl;
+}
+
+void enterPolynomial(std::vector<int>& polynomial, int& degree) {
+	std::cout << "Enter degree of your polynomial>> ";
+	std::cin >> degree;
+	for (int i = 0; i <= degree; i++) {
+		int currentCoefficient = 0;
+		std::cout << "Enter coefficient before x^" << degree - i << ">> ";
+		std::cin >> currentCoefficient;
+		polynomial.push_back(currentCoefficient);
+	}
+}

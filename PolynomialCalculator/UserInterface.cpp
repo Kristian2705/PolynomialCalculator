@@ -11,8 +11,9 @@
 *
 */
 
-#include "UserInterface.h";
-#include "HelperFunctions.h";
+#include "UserInterface.h"
+#include "HelperFunctions.h"
+#include "CalculatorFunctionalities.h";
 
 void polynomialCalculator() {
 
@@ -40,6 +41,7 @@ void polynomialCalculator() {
 		switch (menuOption)
 		{
 			case 1:
+				addPolynomials();
 				break;
 			case 2:
 				break;
