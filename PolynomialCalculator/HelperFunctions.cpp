@@ -148,7 +148,8 @@ void enterPolynomial(std::vector<int>& polynomial, int& degree) {
 	std::cin >> degree;
 	for (int i = 0; i <= degree; i++) {
 		int currentCoefficient = 0;
-		std::cout << "Enter coefficient before x^" << degree - i << ">> ";
+		int currentDegree = degree - i;
+		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
 		std::cin >> currentCoefficient;
 		polynomial.push_back(currentCoefficient);
 	}
