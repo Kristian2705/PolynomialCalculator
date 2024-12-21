@@ -39,6 +39,47 @@ bool isValidOption(uint32_t option) {
 	return option >= OPTIONS_LOWER_BOUND && option <= OPTION_UPPER_BOUND;
 }
 
+int GCD(int a, int b) {
+	while (a != b) {
+		if (a > b) {
+			a -= b;
+		}
+		else {
+			b -= a;
+		}
+	}
+	return a;
+}
+
+Rational reduce(Rational r) {
+	int g = GCD(r.first, r.second);
+	r.first /= g;
+	r.second /= g;
+	if (r.second < 0) {
+		r.first = -r.first;
+		r.second = -r.second;
+	}
+	return r;
+}
+
+Rational addRational(Rational a, Rational b) {
+	int numerator = a.first * b.second + b.first * a.second;
+	int denominator = a.second * b.second;
+	return reduce({ numerator, denominator });
+}
+
+Rational subtractRational(Rational a, Rational b) {
+	int numerator = a.first * b.second - b.first * a.second;
+	int denominator = a.second * b.second;
+	return reduce({ numerator, denominator });
+}
+
+Rational multiplyRational(Rational a, Rational b) {
+	int numerator = a.first * b.first;
+	int denominator = a.second * b.second;
+	return reduce({ numerator, denominator });
+}
+
 void printPolynomial(std::vector<int>& polynomial, int degree) {
 	for (int i = 0; i <= degree; i++) {
 		int currentDegree = degree - i;
