@@ -51,6 +51,84 @@ int GCD(int a, int b) {
 	return a;
 }
 
+bool contains(const char* str, char symbol) {
+	if (!str) {
+		return false;
+	}
+	while (*str)
+	{
+		if (*str == symbol) {
+			return true;
+		}
+		str++;
+	}
+	return false;
+}
+
+int find(const char* str, char symbol) {
+	if (!str) {
+		return -1;
+	}
+	int index = 0;
+	while (*str)
+	{
+		if (*str == symbol) {
+			return index;
+		}
+		str++;
+		index++;
+	}
+	return -1;
+}
+
+char* substring(const char* str, int startIdx, int endIdx) {
+	char* substr = new char[endIdx - startIdx];
+	int currIdx = startIdx;
+	while (currIdx < endIdx) {
+		*substr = str[currIdx];
+		substr++;
+		currIdx++;
+	}
+	substr-= (endIdx - startIdx);
+	return substr;
+}
+
+unsigned int myAtoi(const char* str) {
+	int res = 0;
+	int multiplier = 1;
+	int length = myStrlen(str);
+	str += length;
+	str--;
+	while (length > 0) {
+		if (*str < '0' || *str > '9') {
+			break;
+		}
+		int digit = *str - '0';
+		if (digit == 0) {
+			str--;
+			res *= 10;
+			length--;
+			continue;
+		}
+		res += digit * multiplier;
+		multiplier *= 10;
+		str--;
+		length--;
+	}
+	return res;
+}
+
+unsigned int myStrlen(const char* str) {
+	int counter = 0;
+	while (*str) {
+		if ((*str >= '0' && *str <= '9') || *str == '/') {
+			counter++;
+		}
+		str++;
+	}
+	return counter;
+}
+
 Rational reduce(Rational r) {
 	int g = GCD(r.first, r.second);
 	r.first /= g;
@@ -80,11 +158,35 @@ Rational multiplyRational(Rational a, Rational b) {
 	return reduce({ numerator, denominator });
 }
 
+Rational parseCoefficient(const char* str) {
+	int indexOfSplitter = find(str, '/');
+	if (indexOfSplitter == -1) {
+		int numerator = *str - '0';
+		return { numerator, 1 };
+	}
+	char* numeratorSubstr = substring(str, 0, indexOfSplitter);
+	int numerator = myAtoi(numeratorSubstr);
+
+	delete[] numeratorSubstr;
+
+	int strLength = myStrlen(str);
+
+	char* denominatorSubstr = substring(str, indexOfSplitter + 1, strLength);
+	int denominator = myAtoi(denominatorSubstr);
+
+	delete[] denominatorSubstr;
+
+	return reduce({ numerator, denominator });
+}
+
 void printPolynomial(std::vector<int>& polynomial, int degree) {
 	for (int i = 0; i <= degree; i++) {
 		int currentDegree = degree - i;
+		int currentCoefficient = polynomial.at(i);
+		if (currentCoefficient == 0) {
+			continue;
+		}
 		if (currentDegree == degree) {
-			int currentCoefficient = polynomial.at(i);
 			if (currentCoefficient == 1 || currentCoefficient == -1) {
 				std::cout << "x^" << currentDegree;
 			}
@@ -93,7 +195,6 @@ void printPolynomial(std::vector<int>& polynomial, int degree) {
 			}
 		}
 		else if (currentDegree > 1) {
-			int currentCoefficient = polynomial.at(i);
 			if (currentCoefficient > 0) {
 				if (currentCoefficient == 1) {
 					std::cout << "+x^" << currentDegree;
@@ -112,7 +213,6 @@ void printPolynomial(std::vector<int>& polynomial, int degree) {
 			}
 		}
 		else if (currentDegree == 1) {
-			int currentCoefficient = polynomial.at(i);
 			if (currentCoefficient > 0) {
 				if (currentCoefficient == 1) {
 					std::cout << "+x";
@@ -131,7 +231,6 @@ void printPolynomial(std::vector<int>& polynomial, int degree) {
 			}
 		}
 		else {
-			int currentCoefficient = polynomial.at(i);
 			if (currentCoefficient > 0) {
 				std::cout << "+" << currentCoefficient << std::endl;
 			}
@@ -143,14 +242,19 @@ void printPolynomial(std::vector<int>& polynomial, int degree) {
 	std::cout << std::endl;
 }
 
-void enterPolynomial(std::vector<int>& polynomial, int& degree) {
-	std::cout << "Enter degree of your polynomial>> ";
+Polynomial enterPolynomial() {
+	int degree = 0;
+	std::cout << "Enter the degree of your polynomial>> ";
 	std::cin >> degree;
+	std::cin.ignore();
+
+	Polynomial poly(degree + 1);
 	for (int i = 0; i <= degree; i++) {
-		int currentCoefficient = 0;
+		char coefficient[10];
 		int currentDegree = degree - i;
 		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
-		std::cin >> currentCoefficient;
-		polynomial.push_back(currentCoefficient);
+		std::cin >> coefficient;
+		poly[i] = parseCoefficient(coefficient);
 	}
+	return poly;
 }
