@@ -32,7 +32,13 @@ unsigned int myAtoi(const char* str);
 
 unsigned int myStrlen(const char* str);
 
-//void enterPolynomial(std::vector<int>& polynomial, int& degree);
+bool isEqualToOne(Rational coefficient);
+
+bool isEqualToMinusOne(Rational coefficient);
+
+bool isPositive(Rational coefficient);
+
 Polynomial enterPolynomial();
 
-void printPolynomial(std::vector<int>& polynomial, int degree);
+void printPolynomial(Polynomial polynomial);
+//void printPolynomial(std::vector<int>& polynomial, int degree);

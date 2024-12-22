@@ -11,7 +11,7 @@ void addPolynomials() {
 	Polynomial Px = enterPolynomial();
 
 	std::cout << "P(x) = ";
-	//printPolynomial(Px, degreePx);
+	printPolynomial(Px);
 
 	std::cout << "Enter Polynomial Q(x)" << std::endl;
 	Polynomial Qx = enterPolynomial();

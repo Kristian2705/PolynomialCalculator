@@ -179,68 +179,68 @@ Rational parseCoefficient(const char* str) {
 	return reduce({ numerator, denominator });
 }
 
-void printPolynomial(std::vector<int>& polynomial, int degree) {
-	for (int i = 0; i <= degree; i++) {
-		int currentDegree = degree - i;
-		int currentCoefficient = polynomial.at(i);
-		if (currentCoefficient == 0) {
-			continue;
-		}
-		if (currentDegree == degree) {
-			if (currentCoefficient == 1 || currentCoefficient == -1) {
-				std::cout << "x^" << currentDegree;
-			}
-			else {
-				std::cout << currentCoefficient << "x^" << currentDegree;
-			}
-		}
-		else if (currentDegree > 1) {
-			if (currentCoefficient > 0) {
-				if (currentCoefficient == 1) {
-					std::cout << "+x^" << currentDegree;
-				}
-				else {
-					std::cout << "+" << currentCoefficient << "x^" << currentDegree;
-				}
-			}
-			else {
-				if (currentCoefficient == -1) {
-					std::cout << "-x^" << currentDegree;
-				}
-				else {
-					std::cout << currentCoefficient << "x^" << currentDegree;
-				}
-			}
-		}
-		else if (currentDegree == 1) {
-			if (currentCoefficient > 0) {
-				if (currentCoefficient == 1) {
-					std::cout << "+x";
-				}
-				else {
-					std::cout << "+" << currentCoefficient << "x";
-				}
-			}
-			else {
-				if (currentCoefficient == -1) {
-					std::cout << "-x";
-				}
-				else {
-					std::cout << currentCoefficient << "x";
-				}
-			}
-		}
-		else {
-			if (currentCoefficient > 0) {
-				std::cout << "+" << currentCoefficient << std::endl;
-			}
-			else {
-				std::cout << currentCoefficient << std::endl;
-			}
-		}
-	}
-	std::cout << std::endl;
-}
+//void printPolynomial(std::vector<int>& polynomial, int degree) {
+//	for (int i = 0; i <= degree; i++) {
+//		int currentDegree = degree - i;
+//		int currentCoefficient = polynomial.at(i);
+//		if (currentCoefficient == 0) {
+//			continue;
+//		}
+//		if (currentDegree == degree) {
+//			if (currentCoefficient == 1 || currentCoefficient == -1) {
+//				std::cout << "x^" << currentDegree;
+//			}
+//			else {
+//				std::cout << currentCoefficient << "x^" << currentDegree;
+//			}
+//		}
+//		else if (currentDegree > 1) {
+//			if (currentCoefficient > 0) {
+//				if (currentCoefficient == 1) {
+//					std::cout << "+x^" << currentDegree;
+//				}
+//				else {
+//					std::cout << "+" << currentCoefficient << "x^" << currentDegree;
+//				}
+//			}
+//			else {
+//				if (currentCoefficient == -1) {
+//					std::cout << "-x^" << currentDegree;
+//				}
+//				else {
+//					std::cout << currentCoefficient << "x^" << currentDegree;
+//				}
+//			}
+//		}
+//		else if (currentDegree == 1) {
+//			if (currentCoefficient > 0) {
+//				if (currentCoefficient == 1) {
+//					std::cout << "+x";
+//				}
+//				else {
+//					std::cout << "+" << currentCoefficient << "x";
+//				}
+//			}
+//			else {
+//				if (currentCoefficient == -1) {
+//					std::cout << "-x";
+//				}
+//				else {
+//					std::cout << currentCoefficient << "x";
+//				}
+//			}
+//		}
+//		else {
+//			if (currentCoefficient > 0) {
+//				std::cout << "+" << currentCoefficient << std::endl;
+//			}
+//			else {
+//				std::cout << currentCoefficient << std::endl;
+//			}
+//		}
+//	}
+//	std::cout << std::endl;
+//}
 
 Polynomial enterPolynomial() {
 	int degree = 0;
@@ -248,13 +248,88 @@ Polynomial enterPolynomial() {
 	std::cin >> degree;
 	std::cin.ignore();
 
-	Polynomial poly(degree + 1);
+	Polynomial polynomial(degree + 1);
 	for (int i = 0; i <= degree; i++) {
-		char coefficient[10];
+		char coefficient[MAX_COEFFICIENT_LENGTH];
 		int currentDegree = degree - i;
 		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
 		std::cin >> coefficient;
-		poly[i] = parseCoefficient(coefficient);
+		polynomial[i] = parseCoefficient(coefficient);
 	}
-	return poly;
+	return polynomial;
+}
+
+bool isEqualToOne(Rational coefficient) {
+	return (coefficient.first == 1 && coefficient.second == 1);
+}
+
+bool isEqualToMinusOne(Rational coefficient) {
+	return (coefficient.first == -1 && coefficient.second == 1);
+}
+
+bool isPositive(Rational coefficient) {
+	return (coefficient.first > 0 && coefficient.second > 0);
+}
+
+void printPolynomial(Polynomial polynomial) {
+	int maxDegree = polynomial.size();
+	for (int i = 0; i < maxDegree; i++) {
+		int currentDegree = maxDegree - i - 1;
+		Rational currentCoefficient = polynomial.at(i);
+		if (currentCoefficient.first == 0) {
+			continue;
+		}
+		if (currentDegree == maxDegree - 1) {
+			if (isEqualToOne(currentCoefficient) || isEqualToMinusOne(currentCoefficient)) {
+				std::cout << "x^" << currentDegree;
+			}
+			else {
+				std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
+			}
+		}
+		else if (currentDegree > 1) {
+			if (isPositive(currentCoefficient)) {
+				if (isEqualToOne(currentCoefficient)) {
+					std::cout << "+x^" << currentDegree;
+				}
+				else {
+					std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
+				}
+			}
+			else {
+				if (isEqualToMinusOne(currentCoefficient)) {
+					std::cout << "-x^" << currentDegree;
+				}
+				else {
+					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
+				}
+			}
+		}
+		else if (currentDegree == 1) {
+			if (isPositive(currentCoefficient)) {
+				if (isEqualToOne(currentCoefficient)) {
+					std::cout << "+x";
+				}
+				else {
+					std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << "x";
+				}
+			}
+			else {
+				if (isEqualToMinusOne(currentCoefficient)) {
+					std::cout << "-x";
+				}
+				else {
+					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x";
+				}
+			}
+		}
+		else {
+			if (isPositive(currentCoefficient)) {
+				std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << std::endl;
+			}
+			else {
+				std::cout << currentCoefficient.first << "/" << currentCoefficient.second << std::endl;
+			}
+		}
+	}
 }
