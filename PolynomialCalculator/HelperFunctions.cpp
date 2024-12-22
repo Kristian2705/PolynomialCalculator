@@ -207,9 +207,9 @@ Rational reduce(Rational r) {
 	if (r.first == 0) {
 		return r;
 	}
-	int g = GCD(myAbs(r.first), myAbs(r.second));
-	r.first /= g;
-	r.second /= g;
+	int gcd = GCD(myAbs(r.first), myAbs(r.second));
+	r.first /= gcd;
+	r.second /= gcd;
 	if (r.second < 0) {
 		r.first = -r.first;
 		r.second = -r.second;
@@ -262,9 +262,10 @@ Polynomial enterPolynomial() {
 	Polynomial polynomial(degree + 1);
 	for (int i = 0; i <= degree; i++) {
 		int currentDegree = degree - i;
-		char* coefficient = getCoefficient(currentDegree);
-		/*std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
-		std::cin >> coefficient;*/
+		//char* coefficient = getCoefficient(currentDegree);
+		char coefficient[MAX_COEFFICIENT_LENGTH];
+		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
+		std::cin >> coefficient;
 		polynomial[i] = parseCoefficient(coefficient);
 	}
 	return polynomial;
