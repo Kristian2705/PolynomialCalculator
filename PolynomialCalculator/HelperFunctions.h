@@ -43,3 +43,11 @@ bool isPositive(Rational coefficient);
 Polynomial enterPolynomial();
 
 void printPolynomial(Polynomial polynomial);
+
+Polynomial add(Polynomial Px, Polynomial Qx);
+
+Polynomial multiplyPolynomialByMinusOne(Polynomial Qx);
+
+int getMax(int a, int b);
+
+int getMin(int a, int b);

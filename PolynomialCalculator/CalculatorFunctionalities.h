@@ -4,3 +4,5 @@
 #include <vector>
 
 void addPolynomials();
+
+void subtractPolynomials();

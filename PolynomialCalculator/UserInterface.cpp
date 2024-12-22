@@ -44,6 +44,7 @@ void polynomialCalculator() {
 				addPolynomials();
 				break;
 			case 2:
+				subtractPolynomials();
 				break;
 			case 3:
 				break;

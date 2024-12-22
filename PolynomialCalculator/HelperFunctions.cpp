@@ -107,7 +107,7 @@ unsigned int myAtoi(const char* str) {
 		int digit = *str - '0';
 		if (digit == 0) {
 			str--;
-			res *= 10;
+			multiplier *= 10;
 			length--;
 			continue;
 		}
@@ -139,6 +139,9 @@ unsigned int myAbs(int num) {
 }
 
 Rational reduce(Rational r) {
+	if (r.first == 0) {
+		return r;
+	}
 	int g = GCD(myAbs(r.first), myAbs(r.second));
 	r.first /= g;
 	r.second /= g;
@@ -217,26 +220,48 @@ bool isPositive(Rational coefficient) {
 	return (coefficient.first > 0 && coefficient.second > 0);
 }
 
+
+//IMPORTANT: it may be needed to add a case for degree 0
+
 void printPolynomial(Polynomial polynomial) {
-	int maxDegree = polynomial.size();
-	for (int i = 0; i < maxDegree; i++) {
-		int currentDegree = maxDegree - i - 1;
+	int maxDegree = polynomial.size() - 1;
+	for (int i = 0; i <= maxDegree; i++) {
+		int currentDegree = maxDegree - i;
 		Rational currentCoefficient = polynomial.at(i);
 		if (currentCoefficient.first == 0) {
 			continue;
 		}
-		if (currentDegree == maxDegree - 1) {
-			if (isEqualToOne(currentCoefficient) || isEqualToMinusOne(currentCoefficient)) {
-				std::cout << "x^" << currentDegree;
+		if (currentDegree == maxDegree) {
+			if (maxDegree == 1) {
+				if (isEqualToOne(currentCoefficient) || isEqualToMinusOne(currentCoefficient)) {
+					std::cout << "x^" << currentDegree;
+				}
+				else if (currentCoefficient.second == 1) {
+					std::cout << currentCoefficient.first << "x";
+				}
+				else {
+					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x";
+				}
 			}
 			else {
-				std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
+				if (isEqualToOne(currentCoefficient) || isEqualToMinusOne(currentCoefficient)) {
+					std::cout << "x^" << currentDegree;
+				}
+				else if (currentCoefficient.second == 1) {
+					std::cout << currentCoefficient.first << "x^" << currentDegree;
+				}
+				else {
+					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
+				}
 			}
 		}
 		else if (currentDegree > 1) {
 			if (isPositive(currentCoefficient)) {
 				if (isEqualToOne(currentCoefficient)) {
 					std::cout << "+x^" << currentDegree;
+				}
+				else if (currentCoefficient.second == 1) {
+					std::cout << "+" << currentCoefficient.first << "x^" << currentDegree;
 				}
 				else {
 					std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
@@ -245,6 +270,9 @@ void printPolynomial(Polynomial polynomial) {
 			else {
 				if (isEqualToMinusOne(currentCoefficient)) {
 					std::cout << "-x^" << currentDegree;
+				}
+				else if (currentCoefficient.second == 1) {
+					std::cout << currentCoefficient.first << "x^" << currentDegree;
 				}
 				else {
 					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x^" << currentDegree;
@@ -256,6 +284,9 @@ void printPolynomial(Polynomial polynomial) {
 				if (isEqualToOne(currentCoefficient)) {
 					std::cout << "+x";
 				}
+				else if(currentCoefficient.second == 1){
+					std::cout << "+" << currentCoefficient.first << "x";
+				}
 				else {
 					std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << "x";
 				}
@@ -264,6 +295,9 @@ void printPolynomial(Polynomial polynomial) {
 				if (isEqualToMinusOne(currentCoefficient)) {
 					std::cout << "-x";
 				}
+				else if (currentCoefficient.second == 1) {
+					std::cout << currentCoefficient.first << "x";
+				}
 				else {
 					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << "x";
 				}
@@ -271,11 +305,64 @@ void printPolynomial(Polynomial polynomial) {
 		}
 		else {
 			if (isPositive(currentCoefficient)) {
-				std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << std::endl;
+				if (currentCoefficient.second == 1) {
+					std::cout << "+" << currentCoefficient.first << std::endl;
+				}
+				else {
+					std::cout << "+" << currentCoefficient.first << "/" << currentCoefficient.second << std::endl;
+				}
 			}
 			else {
-				std::cout << currentCoefficient.first << "/" << currentCoefficient.second << std::endl;
+				if (currentCoefficient.second == 1) {
+					std::cout << currentCoefficient.first << std::endl;
+				}
+				else {
+					std::cout << currentCoefficient.first << "/" << currentCoefficient.second << std::endl;
+				}
 			}
 		}
 	}
+	std::cout << std::endl;
+}
+
+Polynomial add(Polynomial Px, Polynomial Qx) {
+	int PxSize = Px.size();
+	int QxSize = Qx.size();
+
+	int size = getMax(PxSize, QxSize);
+
+	Polynomial result(size);
+
+	int minSize = getMin(PxSize, QxSize);
+
+	int firstIdx = 0;
+	int secondIdx = 0;
+
+	for (int i = 0; i < size; i++) {
+
+		Rational firstTerm = (minSize - i) < PxSize ? Px[firstIdx++] : Rational{ 0,1 };
+		Rational secondTerm = (minSize - i) < QxSize ? Qx[secondIdx++] : Rational{ 0,1 };
+
+		result[i] = addRational(firstTerm, secondTerm);
+	}
+	return result;
+}
+
+Polynomial multiplyPolynomialByMinusOne(Polynomial Qx) {
+	int size = Qx.size();
+	for (int i = 0; i < size; i++) {
+		if (Qx[i].first == 0) {
+			continue;
+		}
+		Qx[i] = { -Qx[i].first, Qx[i].second };
+	}
+	return Qx;
+}
+
+int getMax(int a, int b) {
+	return (a >= b ? a : b);
+}
+
+int getMin(int a, int b) {
+	return (a < b ? a : b);
 }
