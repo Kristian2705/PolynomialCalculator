@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>;
+#include <iostream>
 #include <vector>
 
 typedef std::pair<int, int> Rational;
@@ -11,6 +11,8 @@ uint32_t getOption();
 bool isValidOption(uint32_t option);
 
 int GCD(int a, int b);
+
+unsigned int myAbs(int num);
 
 Rational reduce(Rational r);
 
@@ -41,4 +43,3 @@ bool isPositive(Rational coefficient);
 Polynomial enterPolynomial();
 
 void printPolynomial(Polynomial polynomial);
-//void printPolynomial(std::vector<int>& polynomial, int degree);

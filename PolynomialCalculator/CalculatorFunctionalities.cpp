@@ -2,11 +2,6 @@
 #include "HelperFunctions.h"
 
 void addPolynomials() {
-	//std::vector<int> Px = {};
-	//std::vector<int> Qx = {};
-
-	//int degreePx = 0, degreeQx = 0;
-
 	std::cout << "Enter Polynomial P(x)" << std::endl;
 	Polynomial Px = enterPolynomial();
 
@@ -17,7 +12,7 @@ void addPolynomials() {
 	Polynomial Qx = enterPolynomial();
 
 	std::cout << "Q(x) = ";
-	//printPolynomial(Qx, degreeQx);
+	printPolynomial(Qx);
 
 	std::cout << "P(x)+Q(x)=";
 
