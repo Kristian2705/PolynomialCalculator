@@ -10,6 +10,14 @@ uint32_t getOption();
 
 bool isValidOption(uint32_t option);
 
+int getDegree();
+
+bool isValidDegree(int degree);
+
+char* getCoefficient(int currentDegree);
+
+bool isValidCoefficient(const char* str);
+
 int GCD(int a, int b);
 
 unsigned int myAbs(int num);

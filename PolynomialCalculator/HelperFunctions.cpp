@@ -24,7 +24,7 @@ uint32_t getOption() {
 
 			std::cin.ignore(128, '\n');
 
-			std::cout << "Invalid command! Please enter an option from 1 to 11" << std::endl;
+			std::cout << "Invalid command! Please enter an option from 1 to 11!" << std::endl;
 		}
 
 		std::cout << "Enter your option here>> ";
@@ -33,6 +33,71 @@ uint32_t getOption() {
 	} while (!(std::cin >> option) || !isValidOption(option));
 
 	return option;
+}
+
+int getDegree() {
+	int degree = 0; 
+	bool isInvalid = false;
+
+	do {
+		if (isInvalid) {
+			std::cin.clear();
+
+			std::cin.ignore(128, '\n');
+
+			std::cout << "Invalid degree! Please enter a number greater or equal to 1!" << std::endl;
+		}
+
+		std::cout << "Enter the degree of your polynomial>> ";
+
+		isInvalid = true;
+	} while (!(std::cin >> degree) || !isValidDegree(degree));
+
+	return degree;
+}
+
+char* getCoefficient(int currentDegree) {
+	char coefficient[MAX_COEFFICIENT_LENGTH];
+	bool isInvalid = false;
+
+	do {
+		if (isInvalid) {
+			std::cin.clear();
+
+			std::cin.ignore(128, '\n');
+
+			std::cout << "Invalid coefficient! Please enter a non-zero denominator!" << std::endl;
+		}
+
+		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
+
+		isInvalid = true;
+	} while (!(std::cin >> coefficient) || !isValidCoefficient(coefficient));
+
+	return coefficient;
+}
+
+bool isValidCoefficient(const char* str) {
+	//int indexOfSplitter = find(str, '/');
+
+	//if (indexOfSplitter == -1) {
+	//	return true;
+	//}
+
+	//it works but it needs to be done in a better way
+
+	int strLength = myStrlen(str);
+
+	char* denominatorSubstr = substring(str, 0, strLength);
+	int denominator = myAtoi(denominatorSubstr);
+
+	delete[] denominatorSubstr;
+
+	if (denominator == 0) {
+		return false;
+	}
+
+	return true;
 }
 
 bool isValidOption(uint32_t option) {
@@ -192,20 +257,21 @@ Rational parseCoefficient(const char* str) {
 }
 
 Polynomial enterPolynomial() {
-	int degree = 0;
-	std::cout << "Enter the degree of your polynomial>> ";
-	std::cin >> degree;
-	std::cin.ignore();
+	int degree = getDegree();
 
 	Polynomial polynomial(degree + 1);
 	for (int i = 0; i <= degree; i++) {
-		char coefficient[MAX_COEFFICIENT_LENGTH];
 		int currentDegree = degree - i;
-		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
-		std::cin >> coefficient;
+		char* coefficient = getCoefficient(currentDegree);
+		/*std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
+		std::cin >> coefficient;*/
 		polynomial[i] = parseCoefficient(coefficient);
 	}
 	return polynomial;
+}
+
+bool isValidDegree(int degree) {
+	return degree >= 1;
 }
 
 bool isEqualToOne(Rational coefficient) {
