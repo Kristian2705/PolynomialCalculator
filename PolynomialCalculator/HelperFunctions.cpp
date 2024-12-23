@@ -35,8 +35,12 @@ uint32_t getOption() {
 	return option;
 }
 
+bool isValidOption(uint32_t option) {
+	return option >= OPTIONS_LOWER_BOUND && option <= OPTION_UPPER_BOUND;
+}
+
 int getDegree() {
-	int degree = 0; 
+	char degree[MAX_COEFFICIENT_LENGTH];
 	bool isInvalid = false;
 
 	do {
@@ -53,7 +57,31 @@ int getDegree() {
 		isInvalid = true;
 	} while (!(std::cin >> degree) || !isValidDegree(degree));
 
-	return degree;
+	return (myAtoi(degree));
+}
+
+bool isValidDegree(const char* degree) {
+	if (containsSymbols(degree)) {
+		return false;
+	}
+	int splitIdx = find(degree, '/');
+	if (splitIdx == -1) {
+		int num = myAtoi(degree);
+		if (num >= 1) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool containsSymbols(const char* str) {
+	while (*str) {
+		if (!((*str >= '0' && *str <= '9') || (*str == '/'))) {
+			return true;
+		}
+		str++;
+	}
+	return false;
 }
 
 void getCoefficient(char* coefficient, int currentDegree) {
@@ -98,10 +126,6 @@ bool isValidCoefficient(const char* str) {
 	}
 
 	return true;
-}
-
-bool isValidOption(uint32_t option) {
-	return option >= OPTIONS_LOWER_BOUND && option <= OPTION_UPPER_BOUND;
 }
 
 int GCD(int a, int b) {
@@ -244,7 +268,7 @@ Rational parseCoefficient(const char* str) {
 			isNegative = true;
 			str++;
 		}
-		int numerator = *str - '0';
+		int numerator = myAtoi(str);
 		if (isNegative) {
 			numerator *= -1;
 		}
@@ -276,10 +300,6 @@ Polynomial enterPolynomial() {
 		polynomial[i] = parseCoefficient(coefficient);
 	}
 	return polynomial;
-}
-
-bool isValidDegree(int degree) {
-	return degree >= 1;
 }
 
 bool isEqualToOne(Rational coefficient) {

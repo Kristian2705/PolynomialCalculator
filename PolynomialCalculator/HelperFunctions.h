@@ -12,7 +12,9 @@ bool isValidOption(uint32_t option);
 
 int getDegree();
 
-bool isValidDegree(int degree);
+bool isValidDegree(const char* degree);
+
+bool containsSymbols(const char* str);
 
 void getCoefficient(char* coefficient, int currentDegree);
 
