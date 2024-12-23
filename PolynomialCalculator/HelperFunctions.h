@@ -56,8 +56,12 @@ void printPolynomial(Polynomial polynomial);
 
 Polynomial add(Polynomial Px, Polynomial Qx);
 
-Polynomial multiplyPolynomialByMinusOne(Polynomial Qx);
-
 int getMax(int a, int b);
 
 int getMin(int a, int b);
+
+Polynomial multiplyPolynomialByMinusOne(Polynomial Qx);
+
+Polynomial multiply(Polynomial Px, Polynomial Qx);
+
+void divide(Polynomial Ax, Polynomial Bx);

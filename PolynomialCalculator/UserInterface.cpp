@@ -47,8 +47,10 @@ void polynomialCalculator() {
 				subtractPolynomials();
 				break;
 			case 3:
+				multiplyPolynomials();
 				break;
 			case 4:
+				dividePolynomials();
 				break;
 			case 5:
 				break;

@@ -243,6 +243,12 @@ Rational reduce(Rational r) {
 }
 
 Rational addRational(Rational a, Rational b) {
+	if (a.first == 0) {
+		return reduce(b);
+	}
+	if (b.first == 0) {
+		return reduce(a);
+	}
 	int numerator = a.first * b.second + b.first * a.second;
 	int denominator = a.second * b.second;
 	return reduce({ numerator, denominator });
@@ -319,6 +325,40 @@ bool isPositive(Rational coefficient) {
 
 void printPolynomial(Polynomial polynomial) {
 	int maxDegree = polynomial.size() - 1;
+	for (int i = 0; i <= maxDegree; i++) {
+		if (polynomial[i].first != 0) {
+
+			std::cout << (isPositive(polynomial[i]) && (maxDegree - i) != maxDegree ? "+" : "");
+
+			//it can be optimized
+			if (polynomial[i].second == 1) {
+				if (i != maxDegree && polynomial[i].first == -1) {
+					std::cout << "-";
+				}
+				else if (polynomial[i].first == -1) {
+					std::cout << polynomial[i].first;
+				}
+				else if (polynomial[i].first != 1 || i == maxDegree) {
+					std::cout << polynomial[i].first;
+				}
+			}
+			else {
+				std::cout << polynomial[i].first << "/" << polynomial[i].second;
+			}
+
+			if (i < maxDegree - 1) {
+				std::cout << "x^" << (maxDegree - i);
+			}
+			else if (i == maxDegree - 1) {
+				std::cout << "x";
+			}
+			
+		}
+	}
+	if (polynomial.empty()) 
+		std::cout << "0";
+	std::cout << std::endl << std::endl;
+	/*int maxDegree = polynomial.size() - 1;
 	for (int i = 0; i <= maxDegree; i++) {
 		int currentDegree = maxDegree - i;
 		Rational currentCoefficient = polynomial.at(i);
@@ -416,7 +456,7 @@ void printPolynomial(Polynomial polynomial) {
 			}
 		}
 	}
-	std::cout << std::endl;
+	std::cout << std::endl;*/
 }
 
 Polynomial add(Polynomial Px, Polynomial Qx) {
@@ -440,6 +480,14 @@ Polynomial add(Polynomial Px, Polynomial Qx) {
 	return result;
 }
 
+int getMax(int a, int b) {
+	return (a >= b ? a : b);
+}
+
+int getMin(int a, int b) {
+	return (a < b ? a : b);
+}
+
 Polynomial multiplyPolynomialByMinusOne(Polynomial Qx) {
 	int size = Qx.size();
 	for (int i = 0; i < size; i++) {
@@ -451,10 +499,62 @@ Polynomial multiplyPolynomialByMinusOne(Polynomial Qx) {
 	return Qx;
 }
 
-int getMax(int a, int b) {
-	return (a >= b ? a : b);
+Polynomial multiply(Polynomial Px, Polynomial Qx) {
+	int PxSize = Px.size();
+	int QxSize = Qx.size();
+
+	int size = PxSize + QxSize - 1;
+	Polynomial result(size);
+
+	for (int i = 0; i < PxSize; i++) {
+		for (int j = 0; j < QxSize; j++) {
+
+			Rational currentProduct = multiplyRational(Px[i], Qx[j]);
+
+			result[i + j] = addRational(result[i + j], currentProduct);
+
+		}
+	}
+
+	return result;
 }
 
-int getMin(int a, int b) {
-	return (a < b ? a : b);
+void divide(Polynomial Ax, Polynomial Bx) {
+	int AxSize = Ax.size();
+	int BxSize = Bx.size();
+
+	if (AxSize < BxSize) {
+		std::cout << "The degree of the dividend must be greater or equal to the degree of the divisor!" << std::endl;
+		return;
+	}
+
+	Polynomial quotient(AxSize - BxSize + 1);
+
+	int quotientIdx = 0;
+
+	while (AxSize >= BxSize) {
+
+		int currentDegree = AxSize - BxSize;
+
+		Rational reciprocal = { Bx[LEADIND_COEFFICIENT_IDX].second, Bx[LEADIND_COEFFICIENT_IDX].first };
+		Rational currentCoefficient = multiplyRational(Ax[LEADIND_COEFFICIENT_IDX], reciprocal);
+
+		quotient[quotientIdx++] = currentCoefficient;
+
+		Polynomial currentQuotient(currentDegree + 1);
+		currentQuotient[LEADIND_COEFFICIENT_IDX] = currentCoefficient;
+
+		Polynomial currentProduct = multiply(Bx, currentQuotient);
+
+		Ax = add(Ax, multiplyPolynomialByMinusOne(currentProduct));
+		Ax.erase(Ax.begin());
+
+		AxSize--;
+	}
+
+	std::cout << "Quotient Q(x)=";
+	printPolynomial(quotient);
+
+	std::cout << "Remainder R(x)=";
+	printPolynomial(Ax);
 }

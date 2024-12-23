@@ -6,3 +6,7 @@
 void addPolynomials();
 
 void subtractPolynomials();
+
+void multiplyPolynomials();
+
+void dividePolynomials();
