@@ -56,8 +56,7 @@ int getDegree() {
 	return degree;
 }
 
-char* getCoefficient(int currentDegree) {
-	char coefficient[MAX_COEFFICIENT_LENGTH];
+void getCoefficient(char* coefficient, int currentDegree) {
 	bool isInvalid = false;
 
 	do {
@@ -73,20 +72,21 @@ char* getCoefficient(int currentDegree) {
 
 		isInvalid = true;
 	} while (!(std::cin >> coefficient) || !isValidCoefficient(coefficient));
-
-	return coefficient;
 }
 
 bool isValidCoefficient(const char* str) {
-	//int indexOfSplitter = find(str, '/');
-
-	//if (indexOfSplitter == -1) {
-	//	return true;
-	//}
-
-	//it works but it needs to be done in a better way
 
 	int strLength = myStrlen(str);
+
+	if (strLength == 0) {
+		return false;
+	}
+
+	int indexOfSplitter = find(str, '/');
+
+	if (indexOfSplitter == -1) {
+		return true;
+	}
 
 	char* denominatorSubstr = substring(str, 0, strLength);
 	int denominator = myAtoi(denominatorSubstr);
@@ -147,14 +147,15 @@ int find(const char* str, char symbol) {
 }
 
 char* substring(const char* str, int startIdx, int endIdx) {
-	char* substr = new char[endIdx - startIdx];
+	char* substr = new char[endIdx - startIdx + 1];
 	int currIdx = startIdx;
 	while (currIdx < endIdx) {
 		*substr = str[currIdx];
 		substr++;
 		currIdx++;
 	}
-	substr-= (endIdx - startIdx);
+	*substr = '\0';
+	substr -= (endIdx - startIdx);
 	return substr;
 }
 
@@ -238,7 +239,15 @@ Rational multiplyRational(Rational a, Rational b) {
 Rational parseCoefficient(const char* str) {
 	int indexOfSplitter = find(str, '/');
 	if (indexOfSplitter == -1) {
+		bool isNegative = false;
+		if (contains(str, '-')) {
+			isNegative = true;
+			str++;
+		}
 		int numerator = *str - '0';
+		if (isNegative) {
+			numerator *= -1;
+		}
 		return { numerator, 1 };
 	}
 	char* numeratorSubstr = substring(str, 0, indexOfSplitter);
@@ -262,10 +271,8 @@ Polynomial enterPolynomial() {
 	Polynomial polynomial(degree + 1);
 	for (int i = 0; i <= degree; i++) {
 		int currentDegree = degree - i;
-		//char* coefficient = getCoefficient(currentDegree);
 		char coefficient[MAX_COEFFICIENT_LENGTH];
-		std::cout << "Enter coefficient before x^" << currentDegree << ">> ";
-		std::cin >> coefficient;
+		getCoefficient(coefficient, currentDegree);
 		polynomial[i] = parseCoefficient(coefficient);
 	}
 	return polynomial;
@@ -400,15 +407,13 @@ Polynomial add(Polynomial Px, Polynomial Qx) {
 
 	Polynomial result(size);
 
-	int minSize = getMin(PxSize, QxSize);
-
 	int firstIdx = 0;
 	int secondIdx = 0;
 
 	for (int i = 0; i < size; i++) {
 
-		Rational firstTerm = (minSize - i) < PxSize ? Px[firstIdx++] : Rational{ 0,1 };
-		Rational secondTerm = (minSize - i) < QxSize ? Qx[secondIdx++] : Rational{ 0,1 };
+		Rational firstTerm = (size - i) <= PxSize ? Px[firstIdx++] : Rational{ 0,1 };
+		Rational secondTerm = (size - i) <= QxSize ? Qx[secondIdx++] : Rational{ 0,1 };
 
 		result[i] = addRational(firstTerm, secondTerm);
 	}

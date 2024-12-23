@@ -14,7 +14,7 @@ int getDegree();
 
 bool isValidDegree(int degree);
 
-char* getCoefficient(int currentDegree);
+void getCoefficient(char* coefficient, int currentDegree);
 
 bool isValidCoefficient(const char* str);
 
