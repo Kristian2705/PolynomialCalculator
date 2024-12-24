@@ -497,3 +497,18 @@ Polynomial getMultipliedPolynomialByScalar(Polynomial Px, Rational scalar) {
 
 	return result;
 }
+
+Rational getPolynomialValue(Polynomial Px, Rational scalar) {
+	int maxDegree = Px.size() - 1;
+
+	Rational sum = { 0,1 };
+	Rational multiplier = { 1, 1 };
+
+	for (int i = maxDegree; i >= 0 ; i--) {
+		Rational currentResult = multiplyRational(Px[i], multiplier);
+		sum = addRational(sum, currentResult);
+		multiplier = multiplyRational(multiplier, scalar);
+	}
+
+	return sum;
+}

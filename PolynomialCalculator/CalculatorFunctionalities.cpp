@@ -100,3 +100,19 @@ void multiplyPolynomialByScalar() {
 	printPolynomial(result);
 	std::cout << "----------------------" << std::endl;
 }
+
+void findPolynomialValue() {
+	std::cout << "Enter Polynomial P(x)" << std::endl;
+	Polynomial Px = enterPolynomial();
+
+	std::cout << "P(x) = ";
+	printPolynomial(Px);
+
+	char scalar[MAX_COEFFICIENT_LENGTH];
+	getScalar(scalar);
+	Rational scalarRational = parseCoefficient(scalar);
+
+	Rational result = getPolynomialValue(Px, scalarRational);
+	std::cout << "P(" << scalarRational.first << "/" << scalarRational.second << ") = " << result.first << "/" << result.second << std::endl;
+	std::cout << "----------------------" << std::endl;
+}

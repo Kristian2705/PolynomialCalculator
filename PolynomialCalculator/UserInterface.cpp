@@ -56,6 +56,7 @@ void polynomialCalculator() {
 				multiplyPolynomialByScalar();
 				break;
 			case 6:
+				findPolynomialValue();
 				break;
 			case 7:
 				break;

@@ -12,3 +12,5 @@ void multiplyPolynomials();
 void dividePolynomials();
 
 void multiplyPolynomialByScalar();
+
+void findPolynomialValue();
