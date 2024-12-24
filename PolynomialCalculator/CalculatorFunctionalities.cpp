@@ -1,5 +1,6 @@
 #include "CalculatorFunctionalities.h"
 #include "HelperFunctions.h"
+#include "Constants.h"
 
 void addPolynomials() {
 	std::cout << "Enter Polynomial P(x)" << std::endl;
@@ -79,5 +80,23 @@ void dividePolynomials() {
 
 	divide(Ax, Bx);
 
+	std::cout << "----------------------" << std::endl;
+}
+
+void multiplyPolynomialByScalar() {
+	std::cout << "Enter Polynomial P(x)" << std::endl;
+	Polynomial Px = enterPolynomial();
+
+	std::cout << "P(x) = ";
+	printPolynomial(Px);
+
+	char scalar[MAX_COEFFICIENT_LENGTH];
+	getScalar(scalar);
+	Rational scalarRational = parseCoefficient(scalar);
+
+	std::cout << "Result:";
+
+	Polynomial result = getMultipliedPolynomialByScalar(Px, scalarRational);
+	printPolynomial(result);
 	std::cout << "----------------------" << std::endl;
 }

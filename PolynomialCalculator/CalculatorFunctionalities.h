@@ -10,3 +10,5 @@ void subtractPolynomials();
 void multiplyPolynomials();
 
 void dividePolynomials();
+
+void multiplyPolynomialByScalar();

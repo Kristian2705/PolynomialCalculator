@@ -76,7 +76,7 @@ bool isValidDegree(const char* degree) {
 
 bool containsSymbols(const char* str) {
 	while (*str) {
-		if (!((*str >= '0' && *str <= '9') || (*str == '/'))) {
+		if (!((*str >= '0' && *str <= '9') || (*str == '/') || (*str == '-'))) {
 			return true;
 		}
 		str++;
@@ -102,7 +102,29 @@ void getCoefficient(char* coefficient, int currentDegree) {
 	} while (!(std::cin >> coefficient) || !isValidCoefficient(coefficient));
 }
 
+void getScalar(char* scalar) {
+	bool isInvalid = false;
+
+	do {
+		if (isInvalid) {
+			std::cin.clear();
+
+			std::cin.ignore(128, '\n');
+
+			std::cout << "Invalid rational number! Please enter a non-zero denominator!" << std::endl;
+		}
+
+		std::cout << "Enter rational number>> " << std::endl;
+
+		isInvalid = true;
+	} while (!(std::cin >> scalar) || !isValidCoefficient(scalar));
+}
+
 bool isValidCoefficient(const char* str) {
+
+	if (containsSymbols(str)) {
+		return false;
+	}
 
 	int strLength = myStrlen(str);
 
@@ -463,4 +485,15 @@ void divide(Polynomial Ax, Polynomial Bx) {
 
 	std::cout << "Remainder R(x)=";
 	printPolynomial(Ax);
+}
+
+Polynomial getMultipliedPolynomialByScalar(Polynomial Px, Rational scalar) {
+	int PxSize = Px.size();
+	Polynomial result(PxSize);
+
+	for (int i = 0; i < PxSize; i++) {
+		result[i] = multiplyRational(Px[i], scalar);
+	}
+
+	return result;
 }

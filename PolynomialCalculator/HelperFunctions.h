@@ -18,6 +18,8 @@ bool containsSymbols(const char* str);
 
 void getCoefficient(char* coefficient, int currentDegree);
 
+void getScalar(char* scalar);
+
 bool isValidCoefficient(const char* str);
 
 int GCD(int a, int b);
@@ -65,3 +67,5 @@ Polynomial multiplyPolynomialByMinusOne(Polynomial Qx);
 Polynomial multiply(Polynomial Px, Polynomial Qx);
 
 void divide(Polynomial Ax, Polynomial Bx);
+
+Polynomial getMultipliedPolynomialByScalar(Polynomial Px, Rational scalar);

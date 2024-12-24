@@ -53,6 +53,7 @@ void polynomialCalculator() {
 				dividePolynomials();
 				break;
 			case 5:
+				multiplyPolynomialByScalar();
 				break;
 			case 6:
 				break;
