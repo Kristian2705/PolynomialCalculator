@@ -114,7 +114,7 @@ void getScalar(char* scalar) {
 			std::cout << "Invalid rational number! Please enter a non-zero denominator!" << std::endl;
 		}
 
-		std::cout << "Enter rational number>> " << std::endl;
+		std::cout << "Enter rational number>> ";
 
 		isInvalid = true;
 	} while (!(std::cin >> scalar) || !isValidCoefficient(scalar));
@@ -385,6 +385,15 @@ void printPolynomial(Polynomial polynomial) {
 	}
 
 	std::cout << std::endl << std::endl;
+}
+
+void printRational(Rational number) {
+	if (number.second == 1) {
+		std::cout << number.first;
+	}
+	else {
+		std::cout << number.first << "/" << number.second;
+	}
 }
 
 Polynomial add(Polynomial Px, Polynomial Qx) {

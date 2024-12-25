@@ -56,6 +56,8 @@ Polynomial enterPolynomial();
 
 void printPolynomial(Polynomial polynomial);
 
+void printRational(Rational number);
+
 Polynomial add(Polynomial Px, Polynomial Qx);
 
 int getMax(int a, int b);

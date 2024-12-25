@@ -113,6 +113,12 @@ void findPolynomialValue() {
 	Rational scalarRational = parseCoefficient(scalar);
 
 	Rational result = getPolynomialValue(Px, scalarRational);
-	std::cout << "P(" << scalarRational.first << "/" << scalarRational.second << ") = " << result.first << "/" << result.second << std::endl;
+
+	std::cout << "P(";
+	printRational(scalarRational);
+	std::cout << ") = ";
+	printRational(result);
+	std::cout << std::endl;
+
 	std::cout << "----------------------" << std::endl;
 }
