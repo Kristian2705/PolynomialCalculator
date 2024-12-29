@@ -14,3 +14,5 @@ void dividePolynomials();
 void multiplyPolynomialByScalar();
 
 void findPolynomialValue();
+
+void findGCDofPolynomials();

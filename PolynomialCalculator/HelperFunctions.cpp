@@ -489,11 +489,19 @@ void divide(Polynomial Ax, Polynomial Bx) {
 		AxSize--;
 	}
 
+	trimPolynomial(Ax);
+
 	std::cout << "Quotient Q(x)=";
 	printPolynomial(quotient);
 
 	std::cout << "Remainder R(x)=";
 	printPolynomial(Ax);
+}
+
+void trimPolynomial(Polynomial& polynomial) {
+	while (!polynomial.empty() && polynomial[LEADIND_COEFFICIENT_IDX].first == 0) {
+		polynomial.erase(polynomial.begin());
+	}
 }
 
 Polynomial getMultipliedPolynomialByScalar(Polynomial Px, Rational scalar) {
@@ -520,4 +528,41 @@ Rational getPolynomialValue(Polynomial Px, Rational scalar) {
 	}
 
 	return sum;
+}
+
+Polynomial getPolynomialRemainder(Polynomial Px, Polynomial Qx) {
+	int PxSize = Px.size();
+	int QxSize = Qx.size();
+
+	while (PxSize >= QxSize) {
+
+		int currentDegree = PxSize - QxSize;
+
+		Rational reciprocal = { Qx[LEADIND_COEFFICIENT_IDX].second, Qx[LEADIND_COEFFICIENT_IDX].first };
+		Rational currentCoefficient = multiplyRational(Px[LEADIND_COEFFICIENT_IDX], reciprocal);
+
+		Polynomial currentQuotient(currentDegree + 1);
+		currentQuotient[LEADIND_COEFFICIENT_IDX] = currentCoefficient;
+
+		Polynomial currentProduct = multiply(Qx, currentQuotient);
+
+		Px = add(Px, multiplyPolynomialByMinusOne(currentProduct));
+		Px.erase(Px.begin());
+
+		PxSize--;
+	}
+
+	trimPolynomial(Px);
+
+	return Px;
+}
+
+Polynomial getGCD(Polynomial Px, Polynomial Qx) {
+	if (Qx.empty()) {
+		if (Px.size() == 1) {
+			Px[LEADIND_COEFFICIENT_IDX] = { 1, 1 };
+		}
+		return Px;
+	}
+	return getGCD(Qx, getPolynomialRemainder(Px, Qx));
 }

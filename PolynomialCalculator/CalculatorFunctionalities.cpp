@@ -122,3 +122,23 @@ void findPolynomialValue() {
 
 	std::cout << "----------------------" << std::endl;
 }
+
+void findGCDofPolynomials() {
+	std::cout << "Enter Polynomial P(x)" << std::endl;
+	Polynomial Px = enterPolynomial();
+
+	std::cout << "P(x) = ";
+	printPolynomial(Px);
+
+	std::cout << "Enter Polynomial Q(x)" << std::endl;
+	Polynomial Qx = enterPolynomial();
+
+	std::cout << "Q(x) = ";
+	printPolynomial(Qx);
+
+	std::cout << "gcd(P(x), Q(x)) = ";
+
+	Polynomial result = getGCD(Px, Qx);
+	printPolynomial(result);
+	std::cout << "----------------------" << std::endl;
+}

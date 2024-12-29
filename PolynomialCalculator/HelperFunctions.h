@@ -70,6 +70,12 @@ Polynomial multiply(Polynomial Px, Polynomial Qx);
 
 void divide(Polynomial Ax, Polynomial Bx);
 
+void trimPolynomial(Polynomial& polynomial);
+
 Polynomial getMultipliedPolynomialByScalar(Polynomial Px, Rational scalar);
 
 Rational getPolynomialValue(Polynomial Px, Rational scalar);
+
+Polynomial getGCD(Polynomial Px, Polynomial Qx);
+
+Polynomial getPolynomialRemainder(Polynomial Px, Polynomial Qx);

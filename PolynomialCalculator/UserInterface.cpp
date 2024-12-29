@@ -59,6 +59,7 @@ void polynomialCalculator() {
 				findPolynomialValue();
 				break;
 			case 7:
+				findGCDofPolynomials();
 				break;
 			case 8:
 				break;
