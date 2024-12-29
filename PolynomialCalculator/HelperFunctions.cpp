@@ -564,5 +564,10 @@ Polynomial getGCD(Polynomial Px, Polynomial Qx) {
 		}
 		return Px;
 	}
+
+	if (Px.size() < Qx.size()) {
+		return getGCD(Px, getPolynomialRemainder(Qx, Px));
+	}
+
 	return getGCD(Qx, getPolynomialRemainder(Px, Qx));
 }
