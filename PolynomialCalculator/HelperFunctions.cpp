@@ -571,3 +571,38 @@ Polynomial getGCD(Polynomial Px, Polynomial Qx) {
 
 	return getGCD(Qx, getPolynomialRemainder(Px, Qx));
 }
+
+void printVietaFormulas(Polynomial Px) {
+	Rational leadingCoefficient = Px[LEADIND_COEFFICIENT_IDX];
+	int PxSize = Px.size();
+	int multiplier = -1;
+	for (int i = 1; i < PxSize; i++) {
+		Rational currentResult = multiplyRational(leadingCoefficient, { Px[i].second * multiplier, Px[i].first });
+		multiplier *= -1;
+		printFormula(currentResult, i, PxSize - 1);
+	}
+}
+
+void printFormula(Rational result, int idx, int maxRootNumber) {
+	int startNumberOfX = 1;
+	int start = 1;
+	int step = 2;
+	while(start < maxRootNumber) {
+		std::cout << "x" << start;
+		int currentStep = step;
+		for (int j = startNumberOfX + 1; j <= idx; j++) {
+			std::cout << "x" << currentStep++;
+		}
+		step += currentStep;
+		std::cout << " + ";
+		if (currentStep <= maxRootNumber) {
+			currentStep++;
+			continue;
+		}
+		start++;
+		step = start + 1;
+	}
+	std::cout << " = ";
+	printRational(result);
+	std::cout << std::endl;
+}

@@ -16,3 +16,5 @@ void multiplyPolynomialByScalar();
 void findPolynomialValue();
 
 void findGCDofPolynomials();
+
+void displayVietaFormulas();

@@ -62,6 +62,7 @@ void polynomialCalculator() {
 				findGCDofPolynomials();
 				break;
 			case 8:
+				displayVietaFormulas();
 				break;
 			case 9:
 				break;

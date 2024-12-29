@@ -79,3 +79,7 @@ Rational getPolynomialValue(Polynomial Px, Rational scalar);
 Polynomial getGCD(Polynomial Px, Polynomial Qx);
 
 Polynomial getPolynomialRemainder(Polynomial Px, Polynomial Qx);
+
+void printVietaFormulas(Polynomial Px);
+
+void printFormula(Rational result, int idx, int maxRootNumber);

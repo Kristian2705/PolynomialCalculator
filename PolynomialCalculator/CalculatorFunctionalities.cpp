@@ -142,3 +142,15 @@ void findGCDofPolynomials() {
 	printPolynomial(result);
 	std::cout << "----------------------" << std::endl;
 }
+
+void displayVietaFormulas() {
+	std::cout << "Enter Polynomial P(x)" << std::endl;
+	Polynomial Px = enterPolynomial();
+
+	std::cout << "Vieta's formulas for polynomial: P(x) = " << std::endl;
+	printPolynomial(Px);
+
+	printVietaFormulas(Px);
+
+	std::cout << "----------------------" << std::endl;
+}
