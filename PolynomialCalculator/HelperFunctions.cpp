@@ -574,35 +574,89 @@ Polynomial getGCD(Polynomial Px, Polynomial Qx) {
 
 void printVietaFormulas(Polynomial Px) {
 	Rational leadingCoefficient = Px[LEADIND_COEFFICIENT_IDX];
+
 	int PxSize = Px.size();
 	int multiplier = -1;
+
+	int* numberOfRoots = new int[PxSize - 1];
+	for (int i = 1; i <= PxSize - 1; i++) {
+		numberOfRoots[i - 1] = i;
+	}
+
+	std::vector<std::vector<int>> subsets = getSubsets(numberOfRoots, PxSize - 1);
+	subsets.erase(subsets.begin());
+
 	for (int i = 1; i < PxSize; i++) {
-		Rational currentResult = multiplyRational(leadingCoefficient, { Px[i].second * multiplier, Px[i].first });
+		Rational currentResult = multiplyRational(Px[i], { leadingCoefficient.second * multiplier, leadingCoefficient.first });
 		multiplier *= -1;
-		printFormula(currentResult, i, PxSize - 1);
+		printFormula(currentResult, i, PxSize - 1, subsets);
 	}
 }
 
-void printFormula(Rational result, int idx, int maxRootNumber) {
-	int startNumberOfX = 1;
-	int start = 1;
-	int step = 2;
-	while(start < maxRootNumber) {
-		std::cout << "x" << start;
-		int currentStep = step;
-		for (int j = startNumberOfX + 1; j <= idx; j++) {
-			std::cout << "x" << currentStep++;
+void printFormula(Rational result, int idx, int maxRootNumber, std::vector<std::vector<int>>& subsets) {
+	int maxTerms = getCombinations(maxRootNumber, idx);
+	for (int i = 0; i < maxTerms; i++) {
+		for (int j = 0; j < subsets[0].size(); j++) {
+			std::cout << "x" << subsets[0][j];
 		}
-		step += currentStep;
-		std::cout << " + ";
-		if (currentStep <= maxRootNumber) {
-			currentStep++;
-			continue;
+		subsets.erase(subsets.begin());
+		if (i != maxTerms - 1) {
+			std::cout << " + ";
 		}
-		start++;
-		step = start + 1;
 	}
 	std::cout << " = ";
 	printRational(result);
 	std::cout << std::endl;
+}
+
+int getCombinations(int n, int k) {
+	if (k == 0 || k == n) {
+		return 1;
+	}
+	return getCombinations(n - 1, k - 1) + getCombinations(n - 1, k);
+}
+
+void printSubset(int arr[], int mask, int length, std::vector<int>& subest) {
+	for (int i = 0; i < length; i++) {
+		if (mask & 1) {
+			subest.push_back(arr[i]);
+		}
+		mask >>= 1;
+	}
+}
+
+bool compareSubsets(const std::vector<int>& a, const std::vector<int>& b) {
+	if (a.size() != b.size()) {
+		return a.size() < b.size();
+	}
+	for (size_t i = 0; i < a.size() && i < b.size(); ++i) {
+		if (a[i] != b[i]) {
+			return a[i] < b[i];
+		}
+	}
+	return false;
+}
+
+void manualSort(std::vector<std::vector<int>>& subsets) {
+	for (size_t i = 0; i < subsets.size(); ++i) {
+		for (size_t j = i + 1; j < subsets.size(); ++j) {
+			if (!compareSubsets(subsets[i], subsets[j])) {
+				swap(subsets[i], subsets[j]);
+			}
+		}
+	}
+}
+
+std::vector<std::vector<int>> getSubsets(int arr[], int length) {
+	int subestsCount = 1 << length;
+	std::vector<std::vector<int>> subsets;
+	for (int i = 0; i < subestsCount; i++) {
+		std::vector<int> subset;
+		printSubset(arr, i, length, subset);
+		subsets.push_back(subset);
+	}
+
+	manualSort(subsets);
+
+	return subsets;
 }

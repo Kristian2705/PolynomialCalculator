@@ -82,4 +82,14 @@ Polynomial getPolynomialRemainder(Polynomial Px, Polynomial Qx);
 
 void printVietaFormulas(Polynomial Px);
 
-void printFormula(Rational result, int idx, int maxRootNumber);
+void printFormula(Rational result, int idx, int maxRootNumber, std::vector<std::vector<int>>& subsets);
+
+int getCombinations(int n, int k);
+
+void printSubset(int arr[], int mask, int length, std::vector<int>& subest);
+
+bool compareSubsets(const std::vector<int>& a, const std::vector<int>& b);
+
+void manualSort(std::vector<std::vector<int>>& subsets);
+
+std::vector<std::vector<int>> getSubsets(int arr[], int length);
