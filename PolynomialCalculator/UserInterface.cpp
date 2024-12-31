@@ -65,6 +65,7 @@ void polynomialCalculator() {
 				displayVietaFormulas();
 				break;
 			case 9:
+				expressAsPowers();
 				break;
 			case 10:
 				break;

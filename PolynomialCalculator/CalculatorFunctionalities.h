@@ -18,3 +18,5 @@ void findPolynomialValue();
 void findGCDofPolynomials();
 
 void displayVietaFormulas();
+
+void expressAsPowers();

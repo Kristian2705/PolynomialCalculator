@@ -660,3 +660,86 @@ std::vector<std::vector<int>> getSubsets(int arr[], int length) {
 
 	return subsets;
 }
+
+Polynomial getPowers(Polynomial Px, Rational a) {
+	Rational result = { 0, 1 };
+	int PxSize = Px.size();
+
+	Polynomial resultPolynomial(PxSize);
+
+	Rational oppositeA = { -a.first, a.second };
+
+	Polynomial currCoefficients = Px;
+
+	for (int i = 0; i < PxSize - 1; i++) {
+
+		int currCoefficientsSize = currCoefficients.size();
+
+		for (int j = 0; j < currCoefficientsSize - 1; j++) {
+			Rational currentCoefficient = currCoefficients[j];
+
+			Rational currentResult = addRational(multiplyRational(currentCoefficient, { oppositeA.first, oppositeA.second }), currCoefficients[j + 1]);
+			currCoefficients[j + 1] = currentResult;
+		}
+
+		resultPolynomial[PxSize - i - 1] = currCoefficients[currCoefficientsSize - 1];
+		currCoefficients.pop_back();
+	}
+
+	resultPolynomial[LEADIND_COEFFICIENT_IDX] = currCoefficients[LEADIND_COEFFICIENT_IDX];
+
+	return resultPolynomial;
+}
+
+void printAsPowers(Polynomial polynomial, Rational a, bool isPositiveA) {
+	int maxDegree = polynomial.size() - 1;
+
+	bool hasZerosOnly = true;
+
+
+	for (int i = 0; i <= maxDegree; i++) {
+		if (polynomial[i].first != 0) {
+
+			hasZerosOnly = false;
+
+			std::cout << (isPositive(polynomial[i]) && (maxDegree - i) != maxDegree ? "+" : "");
+
+			if (polynomial[i].second == 1) {
+				if (i != maxDegree && polynomial[i].first == -1) {
+					std::cout << "-";
+				}
+				else if (polynomial[i].first == -1) {
+					std::cout << polynomial[i].first;
+				}
+				else if (polynomial[i].first != 1 || i == maxDegree) {
+					std::cout << polynomial[i].first;
+				}
+			}
+			else {
+				std::cout << polynomial[i].first << "/" << polynomial[i].second;
+			}
+
+			if (i < maxDegree - 1) {
+				if (isPositiveA) {
+					std::cout << "(x+";
+				}
+				printRational(a);
+				std::cout << ")^" << (maxDegree - i);
+			}
+			else if (i == maxDegree - 1) {
+				if (isPositiveA) {
+					std::cout << "(x+";
+				}
+				printRational(a);
+				std::cout << ")";
+			}
+
+		}
+	}
+
+	if (hasZerosOnly) {
+		std::cout << "0";
+	}
+
+	std::cout << std::endl << std::endl;
+}

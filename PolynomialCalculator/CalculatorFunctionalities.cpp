@@ -154,3 +154,37 @@ void displayVietaFormulas() {
 
 	std::cout << "----------------------" << std::endl;
 }
+
+void expressAsPowers() {
+	std::cout << "Enter Polynomial P(x)" << std::endl;
+	Polynomial Px = enterPolynomial();
+
+	std::cout << "P(x) = ";
+	printPolynomial(Px);
+
+	char a[MAX_COEFFICIENT_LENGTH];
+	getScalar(a);
+	Rational aRational = parseCoefficient(a);
+
+	if (aRational.first == 0) {
+		std::cout << "P(x) = ";
+		printPolynomial(Px);
+	}
+	else {
+		std::cout << "P(x";
+
+		bool isPositiveA = isPositive(aRational);
+		if (isPositiveA) {
+			std::cout << "+";
+		}
+
+		printRational(aRational);
+
+		std::cout << ") = ";
+
+		Polynomial result = getPowers(Px, aRational);
+		printAsPowers(result, aRational, isPositiveA);
+
+	}
+	std::cout << "----------------------" << std::endl;
+}

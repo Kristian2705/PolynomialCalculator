@@ -93,3 +93,7 @@ bool compareSubsets(const std::vector<int>& a, const std::vector<int>& b);
 void manualSort(std::vector<std::vector<int>>& subsets);
 
 std::vector<std::vector<int>> getSubsets(int arr[], int length);
+
+Polynomial getPowers(Polynomial Px, Rational a);
+
+void printAsPowers(Polynomial result, Rational a, bool isPositiveA);
