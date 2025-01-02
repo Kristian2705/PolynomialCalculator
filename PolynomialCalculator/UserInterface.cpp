@@ -68,6 +68,7 @@ void polynomialCalculator() {
 				expressAsPowers();
 				break;
 			case 10:
+				findRootsAndFactors();
 				break;
 			case 11:
 				std::cout << "You have successfully exited the program!" << std::endl;

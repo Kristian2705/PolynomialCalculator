@@ -20,3 +20,5 @@ void findGCDofPolynomials();
 void displayVietaFormulas();
 
 void expressAsPowers();
+
+void findRootsAndFactors();

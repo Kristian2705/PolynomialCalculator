@@ -743,3 +743,78 @@ void printAsPowers(Polynomial polynomial, Rational a, bool isPositiveA) {
 
 	std::cout << std::endl << std::endl;
 }
+
+void displayRootsAndFactors(Polynomial Px) {
+	std::vector<Rational> possibleRoots;
+
+	Rational constantTerm = Px.back();
+	Rational leadingCoefficient = Px.front();
+
+	int PxSize = Px.size();
+
+	if (!(leadingCoefficient.second == 1 && constantTerm.second == 1)) {
+		int gcd = GCD(constantTerm.second, leadingCoefficient.second);
+
+		Rational gcdRational = { gcd, 1 };
+
+		Px = getMultipliedPolynomialByScalar(Px, gcdRational);
+
+		constantTerm = Px.back();
+		leadingCoefficient = Px.front();
+	}
+
+	std::vector<Rational> pFactors = findFactors(constantTerm);
+	std::vector<Rational> qFactors = findFactors(leadingCoefficient);
+
+	int pFactorsSize = pFactors.size();
+	int qFactorsSize = qFactors.size();
+
+	for (int i = 0; i < pFactorsSize; i++) {
+		for (int j = 0; j < qFactorsSize; j++) {
+			Rational possibleRoot = {pFactors[i].first / qFactors[j].first, 1};
+			if (!containsRoot(possibleRoots, possibleRoot)) {
+				possibleRoots.push_back(possibleRoot);
+			}
+		}
+	}
+
+	std::vector<Rational> roots;
+
+	int rootsCount = possibleRoots.size();
+
+	for (int i = 0; i < rootsCount; i++) {
+
+		Rational currentRoot = possibleRoots[i];
+		Rational result = getPolynomialValue(Px, currentRoot);
+
+		if (result.first == 0) {
+			roots.push_back(currentRoot);
+		}
+	}
+}
+
+std::vector<Rational> findFactors(Rational num) {
+	std::vector<Rational> factors;
+	num = { abs(num.first), num.second }; // Work with absolute values for factors
+	for (int i = 1; i <= sqrt(num.first); ++i) {
+		if (num.first % i == 0) {
+			factors.push_back({i, 1});
+			factors.push_back({ -i, 1 }); // Include negative factors
+			if (i != num.first / i) {    // Avoid duplicate factors
+				factors.push_back({ num.first / i , 1 });
+				factors.push_back({ -num.first / i, 1 });
+			}
+		}
+	}
+	return factors;
+}
+
+bool containsRoot(std::vector<Rational> possibleRoots, Rational num) {
+	int size = possibleRoots.size();
+	for (int i = 0; i < size; i++) {
+		if (possibleRoots[i] == num) {
+			return true;
+		}
+	}
+	return false;
+}

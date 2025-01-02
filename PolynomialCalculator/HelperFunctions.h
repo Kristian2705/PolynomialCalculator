@@ -97,3 +97,9 @@ std::vector<std::vector<int>> getSubsets(int arr[], int length);
 Polynomial getPowers(Polynomial Px, Rational a);
 
 void printAsPowers(Polynomial result, Rational a, bool isPositiveA);
+
+void displayRootsAndFactors(Polynomial Px);
+
+std::vector<Rational> findFactors(Rational num);
+
+bool containsRoot(std::vector<Rational> possibleRoots, Rational num);

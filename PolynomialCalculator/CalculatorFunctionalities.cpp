@@ -188,3 +188,13 @@ void expressAsPowers() {
 	}
 	std::cout << "----------------------" << std::endl;
 }
+
+void findRootsAndFactors() {
+	std::cout << "Enter Polynomial P(x)" << std::endl;
+	Polynomial Px = enterPolynomial();
+
+	std::cout << "P(x) = ";
+	printPolynomial(Px);
+
+	displayRootsAndFactors(Px);
+}
