@@ -752,10 +752,10 @@ void displayRootsAndFactors(Polynomial Px) {
 
 	int PxSize = Px.size();
 
-	if (!(leadingCoefficient.second == 1 && constantTerm.second == 1)) {
-		int gcd = GCD(constantTerm.second, leadingCoefficient.second);
+	int allLCM = findLCMOfPolynomialCoefficients(Px);
 
-		Rational gcdRational = { gcd, 1 };
+	if (allLCM != 1) {
+		Rational gcdRational = { allLCM, 1 };
 
 		Px = getMultipliedPolynomialByScalar(Px, gcdRational);
 
@@ -861,4 +861,13 @@ bool containsRoot(std::vector<Rational> possibleRoots, Rational num) {
 		}
 	}
 	return false;
+}
+
+int findLCMOfPolynomialCoefficients(Polynomial Px) {
+	int PxSize = Px.size();
+	int gcd = Px[0].second;
+	for (int i = 1; i < PxSize; i++) {
+		gcd = ((Px[i].second * gcd) / GCD(gcd, Px[i].second));
+	}
+	return gcd;
 }

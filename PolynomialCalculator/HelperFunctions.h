@@ -103,3 +103,5 @@ void displayRootsAndFactors(Polynomial Px);
 std::vector<Rational> findFactors(Rational num);
 
 bool containsRoot(std::vector<Rational> possibleRoots, Rational num);
+
+int findLCMOfPolynomialCoefficients(Polynomial Px);
