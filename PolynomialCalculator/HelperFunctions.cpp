@@ -771,7 +771,13 @@ void displayRootsAndFactors(Polynomial Px) {
 
 	for (int i = 0; i < pFactorsSize; i++) {
 		for (int j = 0; j < qFactorsSize; j++) {
-			Rational possibleRoot = {pFactors[i].first / qFactors[j].first, 1};
+			Rational possibleRoot;
+			if (pFactors[i].first % qFactors[j].first == 0) {
+				possibleRoot = { pFactors[i].first / qFactors[j].first, 1 };
+			}
+			else {
+				possibleRoot = reduce({ pFactors[i].first, qFactors[j].first });
+			}
 			if (!containsRoot(possibleRoots, possibleRoot)) {
 				possibleRoots.push_back(possibleRoot);
 			}
@@ -780,9 +786,9 @@ void displayRootsAndFactors(Polynomial Px) {
 
 	std::vector<Rational> roots;
 
-	int rootsCount = possibleRoots.size();
+	int possibleRootsCount = possibleRoots.size();
 
-	for (int i = 0; i < rootsCount; i++) {
+	for (int i = 0; i < possibleRootsCount; i++) {
 
 		Rational currentRoot = possibleRoots[i];
 		Rational result = getPolynomialValue(Px, currentRoot);
@@ -790,6 +796,44 @@ void displayRootsAndFactors(Polynomial Px) {
 		if (result.first == 0) {
 			roots.push_back(currentRoot);
 		}
+	}
+
+	int rootsCount = roots.size();
+
+	std::vector<int> rootFolds(rootsCount);
+
+	Polynomial currCoefficients = Px;
+
+	int rootCoefficient = 0;
+
+	while(rootCoefficient < rootsCount){
+
+		int currCoefficientsSize = currCoefficients.size();
+
+		Polynomial lastValidCoefficients = currCoefficients;
+
+		for (int j = 0; j < currCoefficientsSize - 1; j++) {
+			Rational currentCoefficient = currCoefficients[j];
+
+			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootCoefficient]), currCoefficients[j + 1]);
+			currCoefficients[j + 1] = currentResult;
+		}
+
+		if (currCoefficients[currCoefficientsSize - 1].first != 0) {
+			rootCoefficient++;
+			currCoefficients = lastValidCoefficients;
+			continue;
+		}
+
+		rootFolds[rootCoefficient]++;
+		currCoefficients.pop_back();
+	}
+
+	std::cout << "RATIONAL ROOTS:" << std::endl;
+	for (int i = 0; i < rootsCount; i++) {
+		std::cout << "x=";
+		printRational(roots[i]);
+		std::cout << " -> " << rootFolds[i] << "-fold root" << std::endl;
 	}
 }
 
