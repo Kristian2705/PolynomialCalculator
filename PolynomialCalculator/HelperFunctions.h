@@ -105,3 +105,13 @@ std::vector<Rational> findFactors(Rational num);
 bool containsRoot(std::vector<Rational> possibleRoots, Rational num);
 
 int findLCMOfPolynomialCoefficients(Polynomial Px);
+
+void turnPolynomialCoefficientsIntoIntegers(Polynomial& Px, int lcm, Rational& constantTerm, Rational& leadingCoefficient);
+
+void getPossibleRoots(std::vector<Rational>& possibleRoots, const std::vector<Rational> pFactors, const std::vector<Rational> qFactors);
+
+void getRoots(Polynomial Px, std::vector<Rational>& roots, const std::vector<Rational> possibleRoots);
+
+void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, std::vector<Rational> roots, int rootsCount);
+
+void factorizePolynomial(Polynomial Px);

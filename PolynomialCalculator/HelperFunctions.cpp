@@ -745,8 +745,6 @@ void printAsPowers(Polynomial polynomial, Rational a, bool isPositiveA) {
 }
 
 void displayRootsAndFactors(Polynomial Px) {
-	std::vector<Rational> possibleRoots;
-
 	Rational constantTerm = Px.back();
 	Rational leadingCoefficient = Px.front();
 
@@ -755,85 +753,41 @@ void displayRootsAndFactors(Polynomial Px) {
 	int allLCM = findLCMOfPolynomialCoefficients(Px);
 
 	if (allLCM != 1) {
-		Rational gcdRational = { allLCM, 1 };
-
-		Px = getMultipliedPolynomialByScalar(Px, gcdRational);
-
-		constantTerm = Px.back();
-		leadingCoefficient = Px.front();
+		turnPolynomialCoefficientsIntoIntegers(Px, allLCM, constantTerm, leadingCoefficient);
 	}
+
+	std::vector<Rational> possibleRoots;
 
 	std::vector<Rational> pFactors = findFactors(constantTerm);
 	std::vector<Rational> qFactors = findFactors(leadingCoefficient);
 
-	int pFactorsSize = pFactors.size();
-	int qFactorsSize = qFactors.size();
-
-	for (int i = 0; i < pFactorsSize; i++) {
-		for (int j = 0; j < qFactorsSize; j++) {
-			Rational possibleRoot;
-			if (pFactors[i].first % qFactors[j].first == 0) {
-				possibleRoot = { pFactors[i].first / qFactors[j].first, 1 };
-			}
-			else {
-				possibleRoot = reduce({ pFactors[i].first, qFactors[j].first });
-			}
-			if (!containsRoot(possibleRoots, possibleRoot)) {
-				possibleRoots.push_back(possibleRoot);
-			}
-		}
-	}
+	getPossibleRoots(possibleRoots, pFactors, qFactors);
 
 	std::vector<Rational> roots;
 
-	int possibleRootsCount = possibleRoots.size();
-
-	for (int i = 0; i < possibleRootsCount; i++) {
-
-		Rational currentRoot = possibleRoots[i];
-		Rational result = getPolynomialValue(Px, currentRoot);
-
-		if (result.first == 0) {
-			roots.push_back(currentRoot);
-		}
-	}
+	getRoots(Px, roots, possibleRoots);
 
 	int rootsCount = roots.size();
+	
+	if (rootsCount == 0) {
+		printPolynomial(Px);
+		return;
+	}
 
 	std::vector<int> rootFolds(rootsCount);
 
-	Polynomial currCoefficients = Px;
+	getRootFolds(Px, rootFolds, roots, rootsCount);
 
-	int rootCoefficient = 0;
+	//Insert function here
+	
 
-	while(rootCoefficient < rootsCount){
-
-		int currCoefficientsSize = currCoefficients.size();
-
-		Polynomial lastValidCoefficients = currCoefficients;
-
-		for (int j = 0; j < currCoefficientsSize - 1; j++) {
-			Rational currentCoefficient = currCoefficients[j];
-
-			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootCoefficient]), currCoefficients[j + 1]);
-			currCoefficients[j + 1] = currentResult;
+	if (rootsCount > 0) {
+		std::cout << "RATIONAL ROOTS:" << std::endl;
+		for (int i = 0; i < rootsCount; i++) {
+			std::cout << "x=";
+			printRational(roots[i]);
+			std::cout << " -> " << rootFolds[i] << "-fold root" << std::endl;
 		}
-
-		if (currCoefficients[currCoefficientsSize - 1].first != 0) {
-			rootCoefficient++;
-			currCoefficients = lastValidCoefficients;
-			continue;
-		}
-
-		rootFolds[rootCoefficient]++;
-		currCoefficients.pop_back();
-	}
-
-	std::cout << "RATIONAL ROOTS:" << std::endl;
-	for (int i = 0; i < rootsCount; i++) {
-		std::cout << "x=";
-		printRational(roots[i]);
-		std::cout << " -> " << rootFolds[i] << "-fold root" << std::endl;
 	}
 }
 
@@ -865,9 +819,94 @@ bool containsRoot(std::vector<Rational> possibleRoots, Rational num) {
 
 int findLCMOfPolynomialCoefficients(Polynomial Px) {
 	int PxSize = Px.size();
-	int gcd = Px[0].second;
+	int lcm = Px[0].second;
 	for (int i = 1; i < PxSize; i++) {
-		gcd = ((Px[i].second * gcd) / GCD(gcd, Px[i].second));
+		lcm = ((Px[i].second * lcm) / GCD(lcm, Px[i].second));
 	}
-	return gcd;
+	return lcm;
+}
+
+void turnPolynomialCoefficientsIntoIntegers(Polynomial& Px, int lcm, Rational& constantTerm, Rational& leadingCoefficient){
+	Rational gcdRational = { lcm, 1 };
+
+	Px = getMultipliedPolynomialByScalar(Px, gcdRational);
+
+	constantTerm = Px.back();
+	leadingCoefficient = Px.front();
+}
+
+void getPossibleRoots(std::vector<Rational>& possibleRoots, const std::vector<Rational> pFactors, const std::vector<Rational> qFactors) {
+	int pFactorsSize = pFactors.size();
+	int qFactorsSize = qFactors.size();
+
+	for (int i = 0; i < pFactorsSize; i++) {
+		for (int j = 0; j < qFactorsSize; j++) {
+			Rational possibleRoot;
+			if (pFactors[i].first % qFactors[j].first == 0) {
+				possibleRoot = { pFactors[i].first / qFactors[j].first, 1 };
+			}
+			else {
+				possibleRoot = reduce({ pFactors[i].first, qFactors[j].first });
+			}
+			if (!containsRoot(possibleRoots, possibleRoot)) {
+				possibleRoots.push_back(possibleRoot);
+			}
+		}
+	}
+}
+
+void getRoots(Polynomial Px, std::vector<Rational>& roots, const std::vector<Rational> possibleRoots) {
+	int possibleRootsCount = possibleRoots.size();
+
+	for (int i = 0; i < possibleRootsCount; i++) {
+
+		Rational currentRoot = possibleRoots[i];
+		Rational result = getPolynomialValue(Px, currentRoot);
+
+		if (result.first == 0) {
+			roots.push_back(currentRoot);
+		}
+	}
+}
+
+void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, std::vector<Rational> roots ,int rootsCount) {
+	int rootCoefficient = 0;
+
+	while (rootCoefficient < rootsCount) {
+
+		int currCoefficientsSize = Px.size();
+
+		Polynomial lastValidCoefficients = Px;
+
+		for (int j = 0; j < currCoefficientsSize - 1; j++) {
+			Rational currentCoefficient = Px[j];
+
+			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootCoefficient]), Px[j + 1]);
+			Px[j + 1] = currentResult;
+		}
+
+		if (Px[currCoefficientsSize - 1].first != 0) {
+			rootCoefficient++;
+			Px = lastValidCoefficients;
+			continue;
+		}
+
+		rootFolds[rootCoefficient]++;
+		Px.pop_back();
+	}
+}
+
+void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector<int> rootFolds) {
+	int rootsCoefficient = 0;
+	while (rootsCoefficient < roots.size()) {
+		for (int i = 0; i < Px.size(); i++) {
+			Rational currentCoefficient = Px[i];
+
+			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootsCoefficient]), Px[i + 1]);
+			Px[i + 1] = currentResult;
+		}
+		rootsCoefficient++;
+		Px.pop_back();
+	}
+
 }
