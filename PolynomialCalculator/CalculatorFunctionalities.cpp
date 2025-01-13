@@ -8,17 +8,20 @@ void addPolynomials() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "Enter Polynomial Q(x)" << std::endl;
 	Polynomial Qx = enterPolynomial();
 
 	std::cout << "Q(x) = ";
 	printPolynomial(Qx);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "P(x)+Q(x)=";
 
 	Polynomial result = add(Px, Qx);
 	printPolynomial(result);
+	std::cout << std::endl << std::endl;
 	std::cout << "----------------------" << std::endl;
 }
 
@@ -28,18 +31,21 @@ void subtractPolynomials() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "Enter Polynomial Q(x)" << std::endl;
 	Polynomial Qx = enterPolynomial();
 
 	std::cout << "Q(x) = ";
 	printPolynomial(Qx);
+	std::cout << std::endl << std::endl;
 	Qx = multiplyPolynomialByMinusOne(Qx);
 
 	std::cout << "P(x)-Q(x)=";
 
 	Polynomial result = add(Px, Qx);
 	printPolynomial(result);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "----------------------" << std::endl;
 }
@@ -50,17 +56,20 @@ void multiplyPolynomials() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "Enter Polynomial Q(x)" << std::endl;
 	Polynomial Qx = enterPolynomial();
 
 	std::cout << "Q(x) = ";
 	printPolynomial(Qx);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "P(x)*Q(x)=";
 
 	Polynomial result = multiply(Px, Qx);
 	printPolynomial(result);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "----------------------" << std::endl;
 }
@@ -71,12 +80,14 @@ void dividePolynomials() {
 
 	std::cout << "A(x) = ";
 	printPolynomial(Ax);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "Enter Polynomial B(x)" << std::endl;
 	Polynomial Bx = enterPolynomial();
 
 	std::cout << "B(x) = ";
 	printPolynomial(Bx);
+	std::cout << std::endl << std::endl;
 
 	divide(Ax, Bx);
 
@@ -89,6 +100,7 @@ void multiplyPolynomialByScalar() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	char scalar[MAX_COEFFICIENT_LENGTH];
 	getScalar(scalar);
@@ -98,6 +110,7 @@ void multiplyPolynomialByScalar() {
 
 	Polynomial result = getMultipliedPolynomialByScalar(Px, scalarRational);
 	printPolynomial(result);
+	std::cout << std::endl << std::endl;
 	std::cout << "----------------------" << std::endl;
 }
 
@@ -107,6 +120,7 @@ void findPolynomialValue() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	char scalar[MAX_COEFFICIENT_LENGTH];
 	getScalar(scalar);
@@ -129,17 +143,20 @@ void findGCDofPolynomials() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "Enter Polynomial Q(x)" << std::endl;
 	Polynomial Qx = enterPolynomial();
 
 	std::cout << "Q(x) = ";
 	printPolynomial(Qx);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "gcd(P(x), Q(x)) = ";
 
 	Polynomial result = getGCD(Px, Qx);
 	printPolynomial(result);
+	std::cout << std::endl << std::endl;
 	std::cout << "----------------------" << std::endl;
 }
 
@@ -147,8 +164,10 @@ void displayVietaFormulas() {
 	std::cout << "Enter Polynomial P(x)" << std::endl;
 	Polynomial Px = enterPolynomial();
 
-	std::cout << "Vieta's formulas for polynomial: P(x) = " << std::endl;
+	std::cout << std::endl;
+	std::cout << "Vieta's formulas for polynomial: P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	printVietaFormulas(Px);
 
@@ -161,6 +180,7 @@ void expressAsPowers() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	char a[MAX_COEFFICIENT_LENGTH];
 	getScalar(a);
@@ -169,6 +189,7 @@ void expressAsPowers() {
 	if (aRational.first == 0) {
 		std::cout << "P(x) = ";
 		printPolynomial(Px);
+		std::cout << std::endl << std::endl;
 	}
 	else {
 		std::cout << "P(x";
@@ -195,6 +216,9 @@ void findRootsAndFactors() {
 
 	std::cout << "P(x) = ";
 	printPolynomial(Px);
+	std::cout << std::endl << std::endl;
 
 	displayRootsAndFactors(Px);
+
+	std::cout << "----------------------" << std::endl;
 }

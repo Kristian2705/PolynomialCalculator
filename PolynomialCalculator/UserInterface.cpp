@@ -37,7 +37,8 @@ void polynomialCalculator() {
 	std::cout << std::endl;
 
 	do {
-		uint32_t menuOption = getOption();
+		int menuOption = getOption();
+		std::cout << std::endl;
 		switch (menuOption)
 		{
 			case 1:

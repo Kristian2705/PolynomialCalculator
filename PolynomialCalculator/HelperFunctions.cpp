@@ -14,8 +14,8 @@
 #include "HelperFunctions.h"
 #include "Constants.h"
 
-uint32_t getOption() {
-	uint32_t option = 0;
+int getOption() {
+	char strOption[MAX_COEFFICIENT_LENGTH];
 	bool isInvalid = false;
 
 	do {
@@ -30,12 +30,12 @@ uint32_t getOption() {
 		std::cout << "Enter your option here>> ";
 
 		isInvalid = true;
-	} while (!(std::cin >> option) || !isValidOption(option));
+	} while (!(std::cin >> strOption) || !isValidInteger(strOption));
 
-	return option;
+	return myAtoi(strOption);
 }
 
-bool isValidOption(uint32_t option) {
+bool isValidOption(int option) {
 	return option >= OPTIONS_LOWER_BOUND && option <= OPTION_UPPER_BOUND;
 }
 
@@ -55,18 +55,18 @@ int getDegree() {
 		std::cout << "Enter the degree of your polynomial>> ";
 
 		isInvalid = true;
-	} while (!(std::cin >> degree) || !isValidDegree(degree));
+	} while (!(std::cin >> degree) || !isValidInteger(degree));
 
 	return (myAtoi(degree));
 }
 
-bool isValidDegree(const char* degree) {
-	if (containsSymbols(degree)) {
+bool isValidInteger(const char* integer) {
+	if (containsSymbols(integer)) {
 		return false;
 	}
-	int splitIdx = find(degree, '/');
+	int splitIdx = find(integer, '/');
 	if (splitIdx == -1) {
-		int num = myAtoi(degree);
+		int num = myAtoi(integer);
 		if (num >= 1) {
 			return true;
 		}
@@ -342,9 +342,6 @@ bool isPositive(Rational coefficient) {
 	return (coefficient.first > 0 && coefficient.second > 0);
 }
 
-
-//IMPORTANT: it may be needed to add a case for degree 0
-
 void printPolynomial(Polynomial polynomial) {
 	int maxDegree = polynomial.size() - 1;
 	bool hasZerosOnly = true;
@@ -384,7 +381,7 @@ void printPolynomial(Polynomial polynomial) {
 		std::cout << "0";
 	}
 
-	std::cout << std::endl << std::endl;
+	//std::cout << std::endl << std::endl;
 }
 
 void printRational(Rational number) {
@@ -493,9 +490,11 @@ void divide(Polynomial Ax, Polynomial Bx) {
 
 	std::cout << "Quotient Q(x)=";
 	printPolynomial(quotient);
+	std::cout << std::endl << std::endl;
 
 	std::cout << "Remainder R(x)=";
 	printPolynomial(Ax);
+	std::cout << std::endl << std::endl;
 }
 
 void trimPolynomial(Polynomial& polynomial) {
@@ -771,6 +770,7 @@ void displayRootsAndFactors(Polynomial Px) {
 	
 	if (rootsCount == 0) {
 		printPolynomial(Px);
+		std::cout << std::endl << std::endl;
 		return;
 	}
 
@@ -779,7 +779,7 @@ void displayRootsAndFactors(Polynomial Px) {
 	getRootFolds(Px, rootFolds, roots, rootsCount);
 
 	//Insert function here
-	
+	factorizePolynomial(Px, roots, rootFolds);
 
 	if (rootsCount > 0) {
 		std::cout << "RATIONAL ROOTS:" << std::endl;
@@ -898,15 +898,49 @@ void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, std::vector<Ration
 
 void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector<int> rootFolds) {
 	int rootsCoefficient = 0;
-	while (rootsCoefficient < roots.size()) {
-		for (int i = 0; i < Px.size(); i++) {
+	int currentRootFold = 1;
+
+	int rootsSize = roots.size();
+	int PxSize = Px.size();
+
+	while (rootsCoefficient < rootsSize) {
+		for (int i = 0; i < PxSize - 1; i++) {
 			Rational currentCoefficient = Px[i];
 
 			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootsCoefficient]), Px[i + 1]);
 			Px[i + 1] = currentResult;
 		}
-		rootsCoefficient++;
-		Px.pop_back();
-	}
+		if (rootFolds[rootsCoefficient] == currentRootFold) {
+			printCurrentPolynomialPart(roots[rootsCoefficient], rootFolds[rootsCoefficient]);
 
+			rootsCoefficient++;
+			currentRootFold = 1;
+		}
+		else {
+			currentRootFold++;
+		}
+
+		Px.pop_back();
+		PxSize--;
+	}
+	if (PxSize > 1) {
+		std::cout << "(";
+		printPolynomial(Px);
+		std::cout << ")";
+	}
+	std::cout << "=0";
+	std::cout << std::endl;
+}
+
+void printCurrentPolynomialPart(Rational root, int rootFold) {
+	bool isPos = isPositive(root);
+	std::cout << "(x" << (isPos ? " - " : " + ");
+	if (!isPos) {
+		root = multiplyRational(root, { -1, 1 });
+	}
+	printRational(root);
+	std::cout << ")";
+	if (rootFold >= 2) {
+		std::cout << "^" << rootFold;
+	}
 }

@@ -6,13 +6,13 @@
 typedef std::pair<int, int> Rational;
 typedef std::vector<Rational> Polynomial;
 
-uint32_t getOption();
+int getOption();
 
-bool isValidOption(uint32_t option);
+bool isValidOption(int option);
 
 int getDegree();
 
-bool isValidDegree(const char* degree);
+bool isValidInteger(const char* integer);
 
 bool containsSymbols(const char* str);
 
@@ -114,4 +114,6 @@ void getRoots(Polynomial Px, std::vector<Rational>& roots, const std::vector<Rat
 
 void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, std::vector<Rational> roots, int rootsCount);
 
-void factorizePolynomial(Polynomial Px);
+void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector<int> rootFolds);
+
+void printCurrentPolynomialPart(Rational root, int rootFold);
