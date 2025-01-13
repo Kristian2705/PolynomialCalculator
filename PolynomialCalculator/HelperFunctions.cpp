@@ -380,8 +380,6 @@ void printPolynomial(Polynomial polynomial) {
 	if (hasZerosOnly) {
 		std::cout << "0";
 	}
-
-	//std::cout << std::endl << std::endl;
 }
 
 void printRational(Rational number) {
@@ -625,10 +623,12 @@ void printSubset(int arr[], int mask, int length, std::vector<int>& subest) {
 }
 
 bool compareSubsets(const std::vector<int>& a, const std::vector<int>& b) {
-	if (a.size() != b.size()) {
-		return a.size() < b.size();
+	int aSize = a.size();
+	int bSize = b.size();
+	if (aSize != bSize) {
+		return aSize < bSize;
 	}
-	for (size_t i = 0; i < a.size() && i < b.size(); ++i) {
+	for (int i = 0; i < aSize && i < bSize; ++i) {
 		if (a[i] != b[i]) {
 			return a[i] < b[i];
 		}
@@ -637,8 +637,9 @@ bool compareSubsets(const std::vector<int>& a, const std::vector<int>& b) {
 }
 
 void manualSort(std::vector<std::vector<int>>& subsets) {
-	for (size_t i = 0; i < subsets.size(); ++i) {
-		for (size_t j = i + 1; j < subsets.size(); ++j) {
+	int subsetsSize = subsets.size();
+	for (int i = 0; i < subsetsSize; i++) {
+		for (int j = i + 1; j < subsetsSize; j++) {
 			if (!compareSubsets(subsets[i], subsets[j])) {
 				swap(subsets[i], subsets[j]);
 			}
@@ -770,7 +771,9 @@ void displayRootsAndFactors(Polynomial Px) {
 	
 	if (rootsCount == 0) {
 		printPolynomial(Px);
+		std::cout << "=0";
 		std::cout << std::endl << std::endl;
+		std::cout << "There aren't any rational roots of Px" << std::endl;
 		return;
 	}
 
@@ -778,7 +781,6 @@ void displayRootsAndFactors(Polynomial Px) {
 
 	getRootFolds(Px, rootFolds, roots, rootsCount);
 
-	//Insert function here
 	factorizePolynomial(Px, roots, rootFolds);
 
 	if (rootsCount > 0) {
@@ -793,12 +795,12 @@ void displayRootsAndFactors(Polynomial Px) {
 
 std::vector<Rational> findFactors(Rational num) {
 	std::vector<Rational> factors;
-	num = { abs(num.first), num.second }; // Work with absolute values for factors
+	num = { abs(num.first), num.second };
 	for (int i = 1; i <= sqrt(num.first); ++i) {
 		if (num.first % i == 0) {
 			factors.push_back({i, 1});
-			factors.push_back({ -i, 1 }); // Include negative factors
-			if (i != num.first / i) {    // Avoid duplicate factors
+			factors.push_back({ -i, 1 });
+			if (i != num.first / i) {
 				factors.push_back({ num.first / i , 1 });
 				factors.push_back({ -num.first / i, 1 });
 			}
