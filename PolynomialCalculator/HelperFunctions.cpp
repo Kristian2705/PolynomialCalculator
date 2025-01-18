@@ -905,6 +905,14 @@ void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector
 	int rootsSize = roots.size();
 	int PxSize = Px.size();
 
+	Rational leadingCoef = Px[LEADIND_COEFFICIENT_IDX];
+	bool isOne = true;
+
+	if (leadingCoef.first != 1) {
+		printRational(leadingCoef);
+		isOne = false;
+	}
+
 	while (rootsCoefficient < rootsSize) {
 		for (int i = 0; i < PxSize - 1; i++) {
 			Rational currentCoefficient = Px[i];
@@ -927,6 +935,9 @@ void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector
 	}
 	if (PxSize > 1) {
 		std::cout << "(";
+		if (!isOne) {
+			Px = getMultipliedPolynomialByScalar(Px, { 1, leadingCoef.first });
+		}
 		printPolynomial(Px);
 		std::cout << ")";
 	}
