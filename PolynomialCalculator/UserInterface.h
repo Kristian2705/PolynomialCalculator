@@ -3,3 +3,5 @@
 #include <iostream>
 
 void polynomialCalculator();
+
+void printAllFunctionalities();
