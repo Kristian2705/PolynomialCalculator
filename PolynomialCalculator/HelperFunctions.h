@@ -30,8 +30,6 @@ Rational reduce(Rational r);
 
 Rational addRational(Rational a, Rational b);
 
-Rational subtractRational(Rational a, Rational b);
-
 Rational multiplyRational(Rational a, Rational b);
 
 Rational parseCoefficient(const char* str);
@@ -46,10 +44,6 @@ unsigned int myAtoi(const char* str);
 
 unsigned int myStrlen(const char* str);
 
-bool isEqualToOne(Rational coefficient);
-
-bool isEqualToMinusOne(Rational coefficient);
-
 bool isPositive(Rational coefficient);
 
 Polynomial enterPolynomial();
@@ -61,8 +55,6 @@ void printRational(Rational number);
 Polynomial add(Polynomial Px, Polynomial Qx);
 
 int getMax(int a, int b);
-
-int getMin(int a, int b);
 
 Polynomial multiplyPolynomialByMinusOne(Polynomial Qx);
 

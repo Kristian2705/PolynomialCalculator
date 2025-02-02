@@ -115,7 +115,7 @@ void multiplyPolynomialByScalar() {
 	printPolynomial(Px);
 	std::cout << std::endl << std::endl;
 
-	char scalar[MAX_COEFFICIENT_LENGTH];
+	char scalar[MAX_BUFFER_SIZE];
 	getScalar(scalar);
 	Rational scalarRational = parseCoefficient(scalar);
 
@@ -135,7 +135,7 @@ void findPolynomialValue() {
 	printPolynomial(Px);
 	std::cout << std::endl << std::endl;
 
-	char scalar[MAX_COEFFICIENT_LENGTH];
+	char scalar[MAX_BUFFER_SIZE];
 	getScalar(scalar);
 	Rational scalarRational = parseCoefficient(scalar);
 
@@ -195,7 +195,7 @@ void expressAsPowers() {
 	printPolynomial(Px);
 	std::cout << std::endl << std::endl;
 
-	char a[MAX_COEFFICIENT_LENGTH];
+	char a[MAX_BUFFER_SIZE];
 	getScalar(a);
 	Rational aRational = parseCoefficient(a);
 

@@ -15,7 +15,7 @@
 #include "Constants.h"
 
 int getOption() {
-	char strOption[MAX_COEFFICIENT_LENGTH];
+	char strOption[MAX_BUFFER_SIZE];
 	bool isInvalid = false;
 
 	do {
@@ -40,7 +40,7 @@ bool isValidOption(int option) {
 }
 
 int getDegree() {
-	char degree[MAX_COEFFICIENT_LENGTH];
+	char degree[MAX_BUFFER_SIZE];
 	bool isInvalid = false;
 
 	do {
@@ -138,7 +138,7 @@ bool isValidCoefficient(const char* str) {
 		return true;
 	}
 
-	char* denominatorSubstr = substring(str, 0, strLength);
+	char* denominatorSubstr = substring(str, indexOfSplitter + 1, strLength);
 	int denominator = myAtoi(denominatorSubstr);
 
 	delete[] denominatorSubstr;
@@ -276,12 +276,6 @@ Rational addRational(Rational a, Rational b) {
 	return reduce({ numerator, denominator });
 }
 
-Rational subtractRational(Rational a, Rational b) {
-	int numerator = a.first * b.second - b.first * a.second;
-	int denominator = a.second * b.second;
-	return reduce({ numerator, denominator });
-}
-
 Rational multiplyRational(Rational a, Rational b) {
 	int numerator = a.first * b.first;
 	int denominator = a.second * b.second;
@@ -323,19 +317,11 @@ Polynomial enterPolynomial() {
 	Polynomial polynomial(degree + 1);
 	for (int i = 0; i <= degree; i++) {
 		int currentDegree = degree - i;
-		char coefficient[MAX_COEFFICIENT_LENGTH];
+		char coefficient[MAX_BUFFER_SIZE];
 		getCoefficient(coefficient, currentDegree);
 		polynomial[i] = parseCoefficient(coefficient);
 	}
 	return polynomial;
-}
-
-bool isEqualToOne(Rational coefficient) {
-	return (coefficient.first == 1 && coefficient.second == 1);
-}
-
-bool isEqualToMinusOne(Rational coefficient) {
-	return (coefficient.first == -1 && coefficient.second == 1);
 }
 
 bool isPositive(Rational coefficient) {
@@ -414,10 +400,6 @@ Polynomial add(Polynomial Px, Polynomial Qx) {
 
 int getMax(int a, int b) {
 	return (a >= b ? a : b);
-}
-
-int getMin(int a, int b) {
-	return (a < b ? a : b);
 }
 
 Polynomial multiplyPolynomialByMinusOne(Polynomial Qx) {
@@ -593,8 +575,8 @@ void printVietaFormulas(Polynomial Px) {
 void printFormula(Rational result, int idx, int maxRootNumber, std::vector<std::vector<int>>& subsets) {
 	int maxTerms = getCombinations(maxRootNumber, idx);
 	for (int i = 0; i < maxTerms; i++) {
-		for (int j = 0; j < subsets[0].size(); j++) {
-			std::cout << "x" << subsets[0][j];
+		for (int j = 0; j < subsets[LEADIND_COEFFICIENT_IDX].size(); j++) {
+			std::cout << "x" << subsets[LEADIND_COEFFICIENT_IDX][j];
 		}
 		subsets.erase(subsets.begin());
 		if (i != maxTerms - 1) {
@@ -613,10 +595,10 @@ int getCombinations(int n, int k) {
 	return getCombinations(n - 1, k - 1) + getCombinations(n - 1, k);
 }
 
-void printSubset(int arr[], int mask, int length, std::vector<int>& subest) {
+void printSubset(int arr[], int mask, int length, std::vector<int>& subset) {
 	for (int i = 0; i < length; i++) {
 		if (mask & 1) {
-			subest.push_back(arr[i]);
+			subset.push_back(arr[i]);
 		}
 		mask >>= 1;
 	}
@@ -628,7 +610,7 @@ bool compareSubsets(const std::vector<int>& a, const std::vector<int>& b) {
 	if (aSize != bSize) {
 		return aSize < bSize;
 	}
-	for (int i = 0; i < aSize && i < bSize; ++i) {
+	for (int i = 0; i < aSize && i < bSize; i++) {
 		if (a[i] != b[i]) {
 			return a[i] < b[i];
 		}
@@ -678,7 +660,7 @@ Polynomial getPowers(Polynomial Px, Rational a) {
 		for (int j = 0; j < currCoefficientsSize - 1; j++) {
 			Rational currentCoefficient = currCoefficients[j];
 
-			Rational currentResult = addRational(multiplyRational(currentCoefficient, { oppositeA.first, oppositeA.second }), currCoefficients[j + 1]);
+			Rational currentResult = addRational(multiplyRational(currentCoefficient, oppositeA), currCoefficients[j + 1]);
 			currCoefficients[j + 1] = currentResult;
 		}
 
@@ -796,7 +778,7 @@ void displayRootsAndFactors(Polynomial Px) {
 std::vector<Rational> findFactors(Rational num) {
 	std::vector<Rational> factors;
 	num = { abs(num.first), num.second };
-	for (int i = 1; i <= sqrt(num.first); ++i) {
+	for (int i = 1; i <= sqrt(num.first); i++) {
 		if (num.first % i == 0) {
 			factors.push_back({i, 1});
 			factors.push_back({ -i, 1 });
@@ -809,7 +791,7 @@ std::vector<Rational> findFactors(Rational num) {
 	return factors;
 }
 
-bool containsRoot(std::vector<Rational> possibleRoots, Rational num) {
+bool containsRoot(const std::vector<Rational> possibleRoots, Rational num) {
 	int size = possibleRoots.size();
 	for (int i = 0; i < size; i++) {
 		if (possibleRoots[i] == num) {
@@ -829,9 +811,9 @@ int findLCMOfPolynomialCoefficients(Polynomial Px) {
 }
 
 void turnPolynomialCoefficientsIntoIntegers(Polynomial& Px, int lcm, Rational& constantTerm, Rational& leadingCoefficient){
-	Rational gcdRational = { lcm, 1 };
+	Rational lcmRational = { lcm, 1 };
 
-	Px = getMultipliedPolynomialByScalar(Px, gcdRational);
+	Px = getMultipliedPolynomialByScalar(Px, lcmRational);
 
 	constantTerm = Px.back();
 	leadingCoefficient = Px.front();
@@ -871,7 +853,7 @@ void getRoots(Polynomial Px, std::vector<Rational>& roots, const std::vector<Rat
 	}
 }
 
-void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, std::vector<Rational> roots ,int rootsCount) {
+void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, const std::vector<Rational> roots ,int rootsCount) {
 	int rootCoefficient = 0;
 
 	while (rootCoefficient < rootsCount) {
@@ -898,8 +880,8 @@ void getRootFolds(Polynomial Px, std::vector<int>& rootFolds, std::vector<Ration
 	}
 }
 
-void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector<int> rootFolds) {
-	int rootsCoefficient = 0;
+void factorizePolynomial(Polynomial Px, const std::vector<Rational> roots, const std::vector<int> rootFolds) {
+	int rootsIdx = 0;
 	int currentRootFold = 1;
 
 	int rootsSize = roots.size();
@@ -913,17 +895,17 @@ void factorizePolynomial(Polynomial Px, std::vector<Rational> roots, std::vector
 		isOne = false;
 	}
 
-	while (rootsCoefficient < rootsSize) {
+	while (rootsIdx < rootsSize) {
 		for (int i = 0; i < PxSize - 1; i++) {
 			Rational currentCoefficient = Px[i];
 
-			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootsCoefficient]), Px[i + 1]);
+			Rational currentResult = addRational(multiplyRational(currentCoefficient, roots[rootsIdx]), Px[i + 1]);
 			Px[i + 1] = currentResult;
 		}
-		if (rootFolds[rootsCoefficient] == currentRootFold) {
-			printCurrentPolynomialPart(roots[rootsCoefficient], rootFolds[rootsCoefficient]);
+		if (rootFolds[rootsIdx] == currentRootFold) {
+			printCurrentPolynomialPart(roots[rootsIdx], rootFolds[rootsIdx]);
 
-			rootsCoefficient++;
+			rootsIdx++;
 			currentRootFold = 1;
 		}
 		else {
